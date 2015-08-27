@@ -3,17 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.asiainfo.gim</groupId>
 	<artifactId>monitor</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>monitor</name>
 	<description>monitor</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<spring-version>3.2.0.RELEASE</spring-version>
+		<spring-version>3.2.13.RELEASE</spring-version>
 		<quartz-version>2.2.1</quartz-version>
 		<mybatis-version>3.2.8</mybatis-version>
 		<mysql-version>5.1.25</mysql-version>
 		<jersey-version>2.19</jersey-version>
+		<dom4j-version>1.6.1</dom4j-version>
 	</properties>
 
 
@@ -66,9 +67,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.jvnet.hudson.dom4j</groupId>
+			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
-			<version>1.6.1-hudson-3</version>
+			<version>${dom4j-version}</version>
 		</dependency>
 
 		<dependency>
@@ -78,7 +79,7 @@
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-grizzly2-http</artifactId>
