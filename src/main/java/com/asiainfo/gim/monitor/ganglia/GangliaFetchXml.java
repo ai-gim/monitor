@@ -4,66 +4,71 @@
  */
 package com.asiainfo.gim.monitor.ganglia;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
+import java.net.SocketException;
 
 import org.apache.commons.io.IOUtils;
-
+import org.apache.commons.net.telnet.TelnetClient;
+import org.springframework.stereotype.Component;
+@Component
 public class GangliaFetchXml
 {
 
-	private static final String targetIp = "localhost";
+	private static final String targetIp = "172.16.102.130";
 	private static final int targetPort = 8649;
 
-	public static Socket getSocketConn() throws Exception
+	public String fetchGangliaXml()
 	{
-		Socket socket = new Socket(targetIp, targetPort);
-		return socket;
-	}
-
-	public static String fetchGangliaXml()
-	{
-		Socket socket = null;
-		InputStream is = null;
+		TelnetClient tt = new TelnetClient();
 		try
 		{
-			socket = getSocketConn();
-			is = socket.getInputStream();
-			byte[] byteArray = new byte[1024];
-			int len;
-			StringBuffer sb = new StringBuffer();
-			while ((len = is.read(byteArray)) != -1)
-			{
-				sb.append(new String(byteArray, 0, len));
-			}
-			return sb.toString();
+			tt.connect(targetIp, targetPort);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			IOUtils.copy(tt.getInputStream(), out);
+			tt.disconnect();
+		    return new String(out.toByteArray());
+		}
+		catch (SocketException e)
+		{
+			e.printStackTrace();
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		catch (Exception e)
+		return "";
+	}
+
+
+	public static void main(String[] args)
+	{
+		GangliaFetchXml g = new GangliaFetchXml();
+		String xmlStr = g.fetchGangliaXml();
+		System.out.println(xmlStr);
+		FileWriter fileWriter = null;
+		try
+		{
+			fileWriter = new FileWriter("C:/Users/wangjy/Desktop/data.xml");
+			fileWriter.write(xmlStr);
+		}
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 		finally
 		{
-			closeInputStream(is);
-			closeSocket(socket);
+			try
+			{
+				fileWriter.close();
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			fileWriter = null;
 		}
-		return "";
-
-	}
-
-	public static void closeSocket(Socket socket)
-	{
-		IOUtils.closeQuietly(socket);
-	}
-
-	public static void closeInputStream(InputStream is)
-	{
-		IOUtils.closeQuietly(is);
 	}
 
 }
