@@ -12,7 +12,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.asiainfo.gim.common.spring.SpringContext;
-import com.asiainfo.gim.monitor.task.QuartzManager;
 
 public class Main
 {
@@ -33,8 +32,5 @@ public class Main
 		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, new ServerApplication());
 		server.start();
 
-		String jobName = "this is a job";
-		String triggerName = "this is my trigger";
-		QuartzManager.addJob(jobName, triggerName, "0/1 * * * * ?");
 	}
 }
