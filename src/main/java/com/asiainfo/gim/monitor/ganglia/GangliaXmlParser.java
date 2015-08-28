@@ -57,7 +57,7 @@ public class GangliaXmlParser
 		host.setIp(hostElement.attributeValue("IP"));
 		host.setLocation(hostElement.attributeValue("LOCATION"));
 		host.setName(hostElement.attributeValue("NAME"));
-		host.setReportTime(new Date(NumberUtils.toLong(hostElement.attributeValue("REPORTED"))));
+		host.setReportTime(new Date(NumberUtils.toLong(hostElement.attributeValue("REPORTED")) * 1000));
 		Map<String, Metric> map = new HashMap<String, Metric>();
 		for (Element element : (List<Element>) hostElement.elements("METRIC"))
 		{
@@ -74,7 +74,7 @@ public class GangliaXmlParser
 		metric.setIp(host.getIp());
 		metric.setName(metricElement.attributeValue("NAME"));
 		long tn = NumberUtils.toLong(metricElement.attributeValue("TN"));
-		metric.setTime(new Date(time - tn));
+		metric.setTime(new Date((time - tn) * 1000));
 		metric.setUnit(metricElement.attributeValue("UNITS"));
 		metric.setValue(convertValue(metricElement.attributeValue("VAL"), metricElement.attributeValue("TYPE")));
 		return metric;
