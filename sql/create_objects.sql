@@ -1,11 +1,4 @@
 /*cpu index*/
-CREATE TABLE IF NOT EXISTS  `monitor_cpu_used` (
-  `ip` VARCHAR(128) NULL,
-  `value` FLOAT NULL,
-  `unit` VARCHAR(128) NULL,
-  `time` DATETIME NULL)
-ENGINE = InnoDB;
-
 CREATE TABLE IF NOT EXISTS  `monitor_cpu_steal` (
   `ip` VARCHAR(128) NULL,
   `value` FLOAT NULL,
