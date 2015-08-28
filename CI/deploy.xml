@@ -17,8 +17,8 @@
 			rm -rf monitor.zip;
 			cd monitor/bin;
 			chmod 755 *;
-			./monitor stop;
-			./monitor start;
+			./gim-monitor stop;
+			./gim-monitor start;
 			"/>
 	</target>
 	
