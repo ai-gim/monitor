@@ -40,9 +40,18 @@ public class GangliaXmlParser
 			return hostList;
 		}
 
-		Element clusterELement = document.getRootElement().element("CLUSTER");
+		Element rootElement = document.getRootElement();
+		Element clusterELement = null;
+		if(rootElement.element("GRID") == null)
+		{
+			clusterELement = rootElement.element("CLUSTER");
+		}
+		else
+		{
+			clusterELement = rootElement.element("GRID").element("CLUSTER");
+		}
+		
 		long time = NumberUtils.toLong(clusterELement.attributeValue("LOCALTIME"));
-
 		for (Element element : (List<Element>) clusterELement.elements("HOST"))
 		{
 			hostList.add(parseHost(element, time));
