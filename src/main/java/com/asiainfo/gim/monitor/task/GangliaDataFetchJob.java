@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import com.asiainfo.gim.common.amqp.rabbitmq.RabbitMQTemplate;
+import com.asiainfo.gim.common.spring.SpringContext;
+import com.asiainfo.gim.monitor.Constants;
 import com.asiainfo.gim.monitor.entity.Host;
 import com.asiainfo.gim.monitor.ganglia.GangliaXmlFetcher;
 import com.asiainfo.gim.monitor.ganglia.GangliaXmlParser;
@@ -71,6 +74,10 @@ public class GangliaDataFetchJob
 
 	private void reportData(List<Host> hosts)
 	{
-		
+		RabbitMQTemplate rabbitMQTemplate = (RabbitMQTemplate) SpringContext.getBean("rabbitMQTemplate");
+		for (Host host : hosts)
+		{
+			rabbitMQTemplate.send(Constants.RabbitMQ.SERVER_REPORT_EXCHANGE, Constants.RabbitMQ.SERVER_REPORT_ROUTINGKEY, host);
+		}
 	}
 }
