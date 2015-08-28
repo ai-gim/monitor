@@ -9,6 +9,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -20,7 +22,8 @@ import com.asiainfo.gim.monitor.entity.Metric;
 @Component
 public class GangliaXmlParser
 {
-
+	private Log log = LogFactory.getLog(GangliaXmlParser.class);
+	
 	public List<Host> doResolve(String xmlStr)
 	{
 		List<Host> hostList = new ArrayList<Host>();
@@ -33,12 +36,13 @@ public class GangliaXmlParser
 		}
 		catch (DocumentException e)
 		{
+			log.error(e.getMessage(), e);
+			return hostList;
 		}
 
 		Element clusterELement = document.getRootElement().element("CLUSTER");
 		long time = NumberUtils.toLong(clusterELement.attributeValue("LOCALTIME"));
 
-		// ...
 		for (Element element : (List<Element>) clusterELement.elements("HOST"))
 		{
 			hostList.add(parseHost(element, time));
@@ -60,7 +64,7 @@ public class GangliaXmlParser
 			Metric metric = parseMetric(element, host, time);
 			map.put(metric.getName(), metric);
 		}
-		host.setMetricMap(map);
+		host.setMetrics(map);
 		return host;
 	}
 
@@ -88,7 +92,7 @@ public class GangliaXmlParser
 		}
 		else if(StringUtils.equals(type, "uint32"))
 		{
-			return value;
+			return NumberUtils.toInt(value);
 		}
 		else if(StringUtils.equals(type, "double"))
 		{
@@ -96,8 +100,11 @@ public class GangliaXmlParser
 		}
 		else if(StringUtils.equals(type, "uint16"))
 		{
+			return NumberUtils.toInt(value);
+		}
+		else
+		{
 			return value;
 		}
-		return new Object();
 	}
 }

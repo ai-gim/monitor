@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+         classpath:/org/springframework/beans/factory/xml/spring-beans-3.0.xsd
+         http://www.springframework.org/schema/context
+         classpath:/org/springframework/context/config/spring-context-3.0.xsd">
+	
+	<bean id="gangliaDataFecthJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!--false表示等上一个任务执行完后再开启新的任务 -->
+		<property name="concurrent" value="true" />
+		<property name="targetObject">
+			<bean class="com.asiainfo.gim.monitor.task.GangliaDataFetchJob">
+				<property name="report" value="${is.data.report}"></property>
+				<property name="ip" value="${ganglia.gmetad.ip}"></property>
+				<property name="port" value="${ganglia.gmetad.port}"></property>
+			</bean>
+		</property>
+		<property name="targetMethod" value="doCollect"></property>
+	</bean>
+	
+	<bean id="gangliaDataFecthJobTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail" ref="gangliaDataFecthJobDetail"></property>
+		<property name="repeatInterval" value="${ganglia.fetch.task.interval}"></property>
+	</bean>
+	
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="gangliaDataFecthJobTrigger" />
+			</list>
+		</property>
+	</bean>
+	
+</beans>
