@@ -364,7 +364,7 @@ public class GangliaDataFetchJob
 		RabbitMQTemplate rabbitMQTemplate = (RabbitMQTemplate) SpringContext.getBean("rabbitMQTemplate");
 		for (Host host : hosts)
 		{
-			rabbitMQTemplate.send(Constants.RabbitMQ.SERVER_REPORT_EXCHANGE, Constants.RabbitMQ.SERVER_REPORT_ROUTINGKEY, host);
+			rabbitMQTemplate.send(Constants.RabbitMQ.SERVER_REPORT_EXCHANGE, "", host);
 		}
 	}
 }
