@@ -101,7 +101,7 @@ public class GangliaXmlParser
 		}
 		else if(StringUtils.equals(type, "uint32"))
 		{
-			return NumberUtils.toInt(value);
+			return NumberUtils.toFloat(value);
 		}
 		else if(StringUtils.equals(type, "double"))
 		{
@@ -109,7 +109,11 @@ public class GangliaXmlParser
 		}
 		else if(StringUtils.equals(type, "uint16"))
 		{
-			return NumberUtils.toInt(value);
+			return NumberUtils.toFloat(value);
+		}
+		else if(StringUtils.equals(type.trim(), ""))
+		{
+			return NumberUtils.toFloat(value);
 		}
 		else
 		{
