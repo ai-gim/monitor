@@ -16,7 +16,7 @@
 		value(#{ip}, #{value, javaType=java.lang.Float, jdbcType=FLOAT}, #{unit}, #{time});
 	</insert>
 	
-	<select id="listMemBuffers" resultMap="metric" parameterType="com.asiainfo.gim.monitor.domain.query.MonitorQueryParam">
+	<select id="listMemBuffers" resultMap="metric" parameterType="com.asiainfo.gim.monitor.domain.query.MetricQueryParam">
 	    select * from monitor_mem_buffers  
 	    <where>
 	        <if test="ip != null">

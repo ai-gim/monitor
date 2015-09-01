@@ -16,7 +16,7 @@
 		value(#{ip}, #{value, javaType=java.lang.Float, jdbcType=FLOAT}, #{unit}, #{time});
 	</insert>
 	
-	<select id="listNetworkPktsOut" resultMap="metric" parameterType="com.asiainfo.gim.monitor.domain.query.MonitorQueryParam">
+	<select id="listNetworkPktsOut" resultMap="metric" parameterType="com.asiainfo.gim.monitor.domain.query.MetricQueryParam">
 	    select * from monitor_network_pkts_out  
 	    <where>
 	        <if test="ip != null">

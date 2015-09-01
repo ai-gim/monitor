@@ -17,7 +17,7 @@
 	</insert>
 	
 	<select id="listCpuSpeed" resultMap="metric"
-		parameterType="com.asiainfo.gim.monitor.domain.query.MonitorQueryParam">
+		parameterType="com.asiainfo.gim.monitor.domain.query.MetricQueryParam">
 		select * from monitor_cpu_speed  
 		<where>
 			<if test="ip != null">

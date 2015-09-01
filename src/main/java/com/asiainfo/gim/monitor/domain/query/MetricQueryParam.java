@@ -2,13 +2,13 @@ package com.asiainfo.gim.monitor.domain.query;
 
 import java.util.Date;
 
-public class MonitorQueryParam
+public class MetricQueryParam
 {
 
 	private String ip;
 	private Date startTime;
 	private Date endTime;
-	private String indexName;
+	private String metricName;
 	
 	public String getIp()
 	{
@@ -18,14 +18,13 @@ public class MonitorQueryParam
 	{
 		this.ip = ip;
 	}
-	
-	public String getIndexName()
+	public String getMetricName()
 	{
-		return indexName;
+		return metricName;
 	}
-	public void setIndexName(String indexName)
+	public void setMetricName(String metricName)
 	{
-		this.indexName = indexName;
+		this.metricName = metricName;
 	}
 	public Date getStartTime()
 	{

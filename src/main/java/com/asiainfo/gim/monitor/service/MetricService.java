@@ -33,11 +33,11 @@ import com.asiainfo.gim.monitor.dao.NetworkPktsInDao;
 import com.asiainfo.gim.monitor.dao.NetworkPktsOutDao;
 import com.asiainfo.gim.monitor.dao.ProcRunDao;
 import com.asiainfo.gim.monitor.dao.ProcTotalDao;
-import com.asiainfo.gim.monitor.domain.query.MonitorQueryParam;
+import com.asiainfo.gim.monitor.domain.query.MetricQueryParam;
 import com.asiainfo.gim.monitor.entity.Metric;
 
 @Service
-public class MonitorService
+public class MetricService
 {
 	CpuAidleDao cpuAidleDao;
 	CpuNiceDao cpuNiceDao;
@@ -228,60 +228,60 @@ public class MonitorService
 		this.procTotalDao = procTotalDao;
 	}
 
-	public List<Metric> listMetric(MonitorQueryParam monitorQueryParam){
-		String indexName = monitorQueryParam.getIndexName();
+	public List<Metric> listMetric(MetricQueryParam monitorQueryParam){
+		String metricName = monitorQueryParam.getMetricName();
 		List<Metric> resultList= null;
-		if(indexName.equals("cpu_aidle")){
+		if(metricName.equals("cpu_aidle")){
 			resultList = cpuAidleDao.listCpuAidle(monitorQueryParam);
-		}else if(indexName.equals("cpu_nice")){
+		}else if(metricName.equals("cpu_nice")){
 			resultList = cpuNiceDao.listCpuNice(monitorQueryParam);
-		}else if(indexName.equals("cpu_speed")){
+		}else if(metricName.equals("cpu_speed")){
 			resultList = cpuSpeedDao.listCpuSpeed(monitorQueryParam);
-		}else if(indexName.equals("cpu_steal")){
+		}else if(metricName.equals("cpu_steal")){
 			resultList = cpuStealDao.listCpuSteal(monitorQueryParam);
-		}else if(indexName.equals("cpu_system")){
+		}else if(metricName.equals("cpu_system")){
 			resultList = cpuSystemDao.listCpuSystem(monitorQueryParam);
-		}else if(indexName.equals("cpu_user")){
+		}else if(metricName.equals("cpu_user")){
 			resultList = cpuUserDao.listCpuUser(monitorQueryParam);
-		}else if(indexName.equals("cpu_wio")){
+		}else if(metricName.equals("cpu_wio")){
 			resultList = cpuWioDao.listCpuWio(monitorQueryParam);
-		}else if(indexName.equals("disk_free")){
+		}else if(metricName.equals("disk_free")){
 			resultList = diskFreeDao.listDiskFree(monitorQueryParam);
-		}else if(indexName.equals("part_max_used")){
+		}else if(metricName.equals("part_max_used")){
 			resultList = diskPartMaxUsedDao.listDiskPartMaxUsed(monitorQueryParam);
-		}else if(indexName.equals("disk_total")){
+		}else if(metricName.equals("disk_total")){
 			resultList = diskTotalDao.listDiskTotal(monitorQueryParam);
-		}else if(indexName.equals("load_fifteen")){
+		}else if(metricName.equals("load_fifteen")){
 			resultList = loadFifteenDao.listLoadFifteen(monitorQueryParam);
-		}else if(indexName.equals("load_five")){
+		}else if(metricName.equals("load_five")){
 			resultList = loadFiveDao.listLoadFive(monitorQueryParam);
-		}else if(indexName.equals("load_one")){
+		}else if(metricName.equals("load_one")){
 			resultList = loadOneDao.listLoadOne(monitorQueryParam);
-		}else if(indexName.equals("mem_buffers")){
+		}else if(metricName.equals("mem_buffers")){
 			resultList = memBuffersDao.listMemBuffers(monitorQueryParam);
-		}else if(indexName.equals("mem_cached")){
+		}else if(metricName.equals("mem_cached")){
 			resultList = memCachedDao.listMemCached(monitorQueryParam);
-		}else if(indexName.equals("mem_free")){
+		}else if(metricName.equals("mem_free")){
 			resultList = memFreeDao.listMemFree(monitorQueryParam);
-		}else if(indexName.equals("mem_shared")){
+		}else if(metricName.equals("mem_shared")){
 			resultList = memSharedDao.listMemShared(monitorQueryParam);
-		}else if(indexName.equals("swap_free")){
+		}else if(metricName.equals("swap_free")){
 			resultList = memSwapFreeDao.listMemSwapFree(monitorQueryParam);
-		}else if(indexName.equals("swap_total")){
+		}else if(metricName.equals("swap_total")){
 			resultList = memSwapTotalDao.listMemSwapTotal(monitorQueryParam);
-		}else if(indexName.equals("mem_total")){
+		}else if(metricName.equals("mem_total")){
 			resultList = memTotalDao.listMemTotal(monitorQueryParam);
-		}else if(indexName.equals("bytes_in")){
+		}else if(metricName.equals("bytes_in")){
 			resultList = networkBytesInDao.listNetworkBytesIn(monitorQueryParam);
-		}else if(indexName.equals("bytes_out")){
+		}else if(metricName.equals("bytes_out")){
 			resultList = networkBytesOutDao.listNetworkBytesOut(monitorQueryParam);
-		}else if(indexName.equals("pkts_in")){
+		}else if(metricName.equals("pkts_in")){
 			resultList = networkPktsInDao.listNetworkPktsIn(monitorQueryParam);
-		}else if(indexName.equals("pkts_out")){
+		}else if(metricName.equals("pkts_out")){
 			resultList = networkPktsOutDao.listNetworkPktsOut(monitorQueryParam);
-		}else if(indexName.equals("proc_run")){
+		}else if(metricName.equals("proc_run")){
 			resultList = procRunDao.listProcRun(monitorQueryParam);
-		}else if(indexName.equals("proc_total")){
+		}else if(metricName.equals("proc_total")){
 			resultList = procTotalDao.listProcTotal(monitorQueryParam);
 		}else{
 			resultList = new ArrayList<Metric>();

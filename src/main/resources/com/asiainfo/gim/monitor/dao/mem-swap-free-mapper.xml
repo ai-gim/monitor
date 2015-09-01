@@ -16,7 +16,7 @@
 		value(#{ip}, #{value, javaType=java.lang.Float, jdbcType=FLOAT}, #{unit}, #{time});
 	</insert>
 	
-	<select id="listMemSwapFree" resultMap="metric" parameterType="com.asiainfo.gim.monitor.domain.query.MonitorQueryParam">
+	<select id="listMemSwapFree" resultMap="metric" parameterType="com.asiainfo.gim.monitor.domain.query.MetricQueryParam">
 	    select * from monitor_mem_swap_free  
 	    <where>
 	        <if test="ip != null">
@@ -26,5 +26,6 @@
 	            and time between #{startTime} and #{endTime} 
 	        </if>
 	    </where>
+	    order by time
 	</select>
 </mapper>

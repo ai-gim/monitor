@@ -21,7 +21,7 @@
 
 
 	<select id="listCpuIdle" resultMap="metric"
-		parameterType="com.asiainfo.gim.monitor.domain.query.MonitorQueryParam">
+		parameterType="com.asiainfo.gim.monitor.domain.query.MetricQueryParam">
 		select * from monitor_cpu_idle
 		<where>
 			<if test="ip != null">
