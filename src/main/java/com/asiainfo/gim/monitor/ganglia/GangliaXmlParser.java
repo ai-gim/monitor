@@ -87,7 +87,8 @@ public class GangliaXmlParser
 		Metric metric = new Metric();
 		metric.setIp(host.getIp());
 		metric.setName(metricElement.attributeValue("NAME"));
-		long tn = NumberUtils.toLong(metricElement.attributeValue("TN"));
+		int tn = NumberUtils.toInt(metricElement.attributeValue("TN"));
+		metric.setTn(tn);
 		metric.setTime(new Date((time - tn) * 1000));
 		metric.setUnit(metricElement.attributeValue("UNITS"));
 		metric.setValue(convertValue(metricElement.attributeValue("VAL"), metricElement.attributeValue("TYPE")));

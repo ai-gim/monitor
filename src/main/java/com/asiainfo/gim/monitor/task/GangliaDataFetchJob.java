@@ -299,6 +299,11 @@ public class GangliaDataFetchJob
 	}
 	
 	private void saveMetricByName(Metric metric){
+		if (metric.getTn() >= 20)
+		{
+			return;
+		}
+		
 		String metricName = metric.getName();
 		if("cpu_aidle".equalsIgnoreCase(metricName)){
 			cpuAidleDao.insertCpuAidle(metric);
