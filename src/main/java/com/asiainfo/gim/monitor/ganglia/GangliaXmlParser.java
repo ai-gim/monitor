@@ -41,22 +41,27 @@ public class GangliaXmlParser
 		}
 
 		Element rootElement = document.getRootElement();
-		Element clusterELement = null;
 		if(rootElement.element("GRID") == null)
 		{
-			clusterELement = rootElement.element("CLUSTER");
+			Element clusterELement = rootElement.element("CLUSTER");
+			long time = NumberUtils.toLong(clusterELement.attributeValue("LOCALTIME"));
+			for (Element element : (List<Element>) clusterELement.elements("HOST"))
+			{
+				hostList.add(parseHost(element, time));
+			}
 		}
 		else
 		{
-			clusterELement = rootElement.element("GRID").element("CLUSTER");
+			for(Element clusterELement: (List<Element>)rootElement.element("GRID").elements("CLUSTER"))
+			{
+				long time = NumberUtils.toLong(clusterELement.attributeValue("LOCALTIME"));
+				for (Element element : (List<Element>) clusterELement.elements("HOST"))
+				{
+					hostList.add(parseHost(element, time));
+				}
+			}
 		}
 		
-		long time = NumberUtils.toLong(clusterELement.attributeValue("LOCALTIME"));
-		for (Element element : (List<Element>) clusterELement.elements("HOST"))
-		{
-			hostList.add(parseHost(element, time));
-		}
-
 		return hostList;
 	}
 
