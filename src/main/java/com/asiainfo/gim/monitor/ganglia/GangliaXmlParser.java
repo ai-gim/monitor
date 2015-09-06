@@ -40,14 +40,28 @@ public class GangliaXmlParser
 			return hostList;
 		}
 
-		Element clusterELement = document.getRootElement().element("CLUSTER");
-		long time = NumberUtils.toLong(clusterELement.attributeValue("LOCALTIME"));
-
-		for (Element element : (List<Element>) clusterELement.elements("HOST"))
+		Element rootElement = document.getRootElement();
+		if(rootElement.element("GRID") == null)
 		{
-			hostList.add(parseHost(element, time));
+			Element clusterELement = rootElement.element("CLUSTER");
+			long time = NumberUtils.toLong(clusterELement.attributeValue("LOCALTIME"));
+			for (Element element : (List<Element>) clusterELement.elements("HOST"))
+			{
+				hostList.add(parseHost(element, time));
+			}
 		}
-
+		else
+		{
+			for(Element clusterELement: (List<Element>)rootElement.element("GRID").elements("CLUSTER"))
+			{
+				long time = NumberUtils.toLong(clusterELement.attributeValue("LOCALTIME"));
+				for (Element element : (List<Element>) clusterELement.elements("HOST"))
+				{
+					hostList.add(parseHost(element, time));
+				}
+			}
+		}
+		
 		return hostList;
 	}
 
@@ -73,7 +87,8 @@ public class GangliaXmlParser
 		Metric metric = new Metric();
 		metric.setIp(host.getIp());
 		metric.setName(metricElement.attributeValue("NAME"));
-		long tn = NumberUtils.toLong(metricElement.attributeValue("TN"));
+		int tn = NumberUtils.toInt(metricElement.attributeValue("TN"));
+		metric.setTn(tn);
 		metric.setTime(new Date((time - tn) * 1000));
 		metric.setUnit(metricElement.attributeValue("UNITS"));
 		metric.setValue(convertValue(metricElement.attributeValue("VAL"), metricElement.attributeValue("TYPE")));

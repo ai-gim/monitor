@@ -68,10 +68,7 @@ public class RabbitMQInitializingBean implements InitializingBean, ApplicationCo
 			factory.registerBeanDefinition("rabbitMQTemplate", builder.getBeanDefinition());
 
 			RabbitMQTemplate rabbitMQTemplate = (RabbitMQTemplate) context.getBean("rabbitMQTemplate");
-			rabbitMQTemplate.exchangeDeclare(Constants.RabbitMQ.SERVER_REPORT_EXCHANGE, "direct");
-			rabbitMQTemplate.queueDeclare(Constants.RabbitMQ.SERVER_REPORT_QUEUE);
-			rabbitMQTemplate.bind(Constants.RabbitMQ.SERVER_REPORT_EXCHANGE, Constants.RabbitMQ.SERVER_REPORT_QUEUE,
-					Constants.RabbitMQ.SERVER_REPORT_ROUTINGKEY);
+			rabbitMQTemplate.exchangeDeclare(Constants.RabbitMQ.SERVER_REPORT_EXCHANGE, "fanout");
 		}
 	}
 

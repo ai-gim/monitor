@@ -34,6 +34,12 @@
 		<appender-ref ref="Console" />  
 	</category>
 	
+	<category name="com.asiainfo.gim.monitor">     
+    	<level value="INFO" />   
+		<appender-ref ref="ApiRollingFile" />  
+		<appender-ref ref="Console" />  
+	</category>
+	
 	<category name="com.asiainfo.gim.common.rest">     
     	<level value="INFO" />   
 		<appender-ref ref="ApiRollingFile" />  

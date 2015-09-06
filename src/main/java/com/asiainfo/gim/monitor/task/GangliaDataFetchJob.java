@@ -83,6 +83,11 @@ public class GangliaDataFetchJob extends DaoCollection
 	}
 	
 	private void saveMetricByName(Metric metric){
+		if (metric.getTn() >= 20)
+		{
+			return;
+		}
+		
 		String metricName = metric.getName();
 		if("cpu_aidle".equalsIgnoreCase(metricName)){
 			cpuAidleDao.insertCpuAidle(metric);
@@ -148,7 +153,7 @@ public class GangliaDataFetchJob extends DaoCollection
 		RabbitMQTemplate rabbitMQTemplate = (RabbitMQTemplate) SpringContext.getBean("rabbitMQTemplate");
 		for (Host host : hosts)
 		{
-			rabbitMQTemplate.send(Constants.RabbitMQ.SERVER_REPORT_EXCHANGE, Constants.RabbitMQ.SERVER_REPORT_ROUTINGKEY, host);
+			rabbitMQTemplate.send(Constants.RabbitMQ.SERVER_REPORT_EXCHANGE, "", host);
 		}
 	}
 }
