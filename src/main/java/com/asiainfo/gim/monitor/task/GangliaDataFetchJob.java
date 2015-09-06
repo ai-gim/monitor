@@ -69,7 +69,6 @@ public class GangliaDataFetchJob extends DaoCollection
 				reportData(hosts);
 			}
 		}
-		System.out.println("collect finish......");
 	}
 
 	private void saveData(List<Host> hosts)

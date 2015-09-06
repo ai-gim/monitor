@@ -53,6 +53,5 @@ public class GangliaDataCleanJob extends DaoCollection
 		networkPktsOutDao.deleteNetworkPktsOut(metricDeleteParam);
 		procRunDao.deleteProcRun(metricDeleteParam);
 		procTotalDao.deleteProcTotal(metricDeleteParam);
-		System.err.println("delete data ending.......");
 	}
 }
