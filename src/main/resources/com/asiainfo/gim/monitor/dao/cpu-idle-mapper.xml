@@ -5,15 +5,50 @@
 
 <mapper namespace="com.asiainfo.gim.monitor.dao.CpuIdleDao">
 	<resultMap id="metric" type="com.asiainfo.gim.monitor.entity.Metric">
-		<result property="ip" column="ip"/>
-		<result property="value" column="value" javaType="java.lang.Float" jdbcType="FLOAT"/>
-		<result property="unit" column="unit"/>
+		<result property="ip" column="ip" />
+		<result property="value" column="value" javaType="java.lang.Float"
+			jdbcType="FLOAT" />
+		<result property="unit" column="unit" />
 		<result property="time" column="time" />
 	</resultMap>
 
 	<insert id="insertCpuIdle" parameterType="com.asiainfo.gim.monitor.entity.Metric">
-		insert into monitor_cpu_idle(ip, value, unit, time)
-		value(#{ip}, #{value, javaType=java.lang.Float, jdbcType=FLOAT}, #{unit}, #{time});
+		insert into
+		monitor_cpu_idle(ip, value, unit, time)
+		value(#{ip}, #{value,
+		javaType=java.lang.Float, jdbcType=FLOAT}, #{unit}, #{time});
 	</insert>
+
+
+	<select id="listCpuIdle" resultMap="metric"
+		parameterType="com.asiainfo.gim.monitor.domain.query.MetricQueryParam">
+		select * from monitor_cpu_idle
+		<where>
+			<if test="ip != null">
+				ip = #{ip}
+			</if>
+			<if test="!(startTime == null || endTime == null)">
+				and time between #{startTime} and #{endTime}
+			</if>
+		</where>
+		order by time
+	</select>
 	
+	<delete id="deleteCpuIdle" parameterType="com.asiainfo.gim.monitor.domain.delete.MetricDeleteParam">
+	    delete from monitor_cpu_idle  
+	    <where>
+	       <if test="ip != null">
+	            ip = #{ip} 
+	        </if>
+	        <if test="startTime != null and endTime != null">
+	            and time between #{startTime} and #{endTime} 
+	        </if>
+	        <if test="startTime != null and endTime == null">
+	            and time &lt; #{startTime}
+	        </if>
+	        <if test="startTime == null and endTime != null">
+	            and time &gt; #{endTime}
+	        </if>
+	    </where>
+	</delete>
 </mapper>
