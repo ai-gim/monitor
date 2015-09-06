@@ -29,4 +29,22 @@
 		</where>
 		order by time
 	</select>
+	
+	<delete id="deleteCpuSpeed" parameterType="com.asiainfo.gim.monitor.domain.delete.MetricDeleteParam">
+	    delete from monitor_cpu_speed  
+	    <where>
+	       <if test="ip != null">
+	            ip = #{ip} 
+	        </if>
+	        <if test="startTime != null and endTime != null">
+	            and time between #{startTime} and #{endTime} 
+	        </if>
+	        <if test="startTime != null and endTime == null">
+	            and time &lt; #{startTime}
+	        </if>
+	        <if test="startTime == null and endTime != null">
+	            and time &gt; #{endTime}
+	        </if>
+	    </where>
+	</delete>
 </mapper>
