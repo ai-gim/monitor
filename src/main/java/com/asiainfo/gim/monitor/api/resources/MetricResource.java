@@ -28,16 +28,16 @@ public class MetricResource
 	private MetricService monitorService;
 	
 	@QueryParam("startTime")
-	private Date startTime;
+	private long startTime;
 	
 	@QueryParam("endTime")
-	private Date endTime;
+	private long endTime;
 	
 	@QueryParam("ip")
 	private String ip;
 	
-	@QueryParam("MetricName")
-	private String MetricName;
+	@QueryParam("metricName")
+	private String metricName;
 
 	public MetricResource()
 	{
@@ -50,13 +50,13 @@ public class MetricResource
 	public List<Metric> listMetric()
 	{
 		MetricQueryParam monitorQueryParam = new MetricQueryParam();
-		if(StringUtils.isEmpty(MetricName) || startTime == null || endTime == null){
+		if(StringUtils.isEmpty(metricName) || startTime == 0 || endTime == 0){
 			throw new ValidationException("illegal parameter");
 		}
-		monitorQueryParam.setStartTime(startTime);
-		monitorQueryParam.setEndTime(endTime);
+		monitorQueryParam.setStartTime(new Date(startTime));
+		monitorQueryParam.setEndTime(new Date(endTime));
 		monitorQueryParam.setIp(ip);
-		monitorQueryParam.setMetricName(MetricName);
+		monitorQueryParam.setMetricName(metricName);
 		return monitorService.listMetric(monitorQueryParam);
 	}
 	

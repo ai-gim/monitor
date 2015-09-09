@@ -9,9 +9,9 @@ public class GangliaDataCleanJob extends DaoCollection
 {
 
 	//历史数据保留的天数（以天为单位）
-	private int keepDuration;
+	private long keepDuration;
 	
-	public void setKeepDuration(int keepDuration)
+	public void setKeepDuration(long keepDuration)
 	{
 		this.keepDuration = keepDuration;
 	}

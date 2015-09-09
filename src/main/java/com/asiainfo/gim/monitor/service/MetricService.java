@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.gim.monitor.dao.CpuAidleDao;
+import com.asiainfo.gim.monitor.dao.CpuIdleDao;
 import com.asiainfo.gim.monitor.dao.CpuNiceDao;
 import com.asiainfo.gim.monitor.dao.CpuSpeedDao;
 import com.asiainfo.gim.monitor.dao.CpuStealDao;
@@ -40,6 +41,7 @@ import com.asiainfo.gim.monitor.entity.Metric;
 public class MetricService
 {
 	CpuAidleDao cpuAidleDao;
+	CpuIdleDao cpuIdleDao;
 	CpuNiceDao cpuNiceDao;
 	CpuSpeedDao cpuSpeedDao;
 	CpuStealDao cpuStealDao;
@@ -227,12 +229,20 @@ public class MetricService
 	{
 		this.procTotalDao = procTotalDao;
 	}
+	
+	@Resource
+	public void setCpuIdleDao(CpuIdleDao cpuIdleDao)
+	{
+		this.cpuIdleDao = cpuIdleDao;
+	}
 
 	public List<Metric> listMetric(MetricQueryParam monitorQueryParam){
 		String metricName = monitorQueryParam.getMetricName();
 		List<Metric> resultList= null;
 		if(metricName.equals("cpu_aidle")){
 			resultList = cpuAidleDao.listCpuAidle(monitorQueryParam);
+		}else if(metricName.equals("cpu_idle")){
+			resultList = cpuIdleDao.listCpuIdle(monitorQueryParam);
 		}else if(metricName.equals("cpu_nice")){
 			resultList = cpuNiceDao.listCpuNice(monitorQueryParam);
 		}else if(metricName.equals("cpu_speed")){
