@@ -14,6 +14,10 @@ public class AlertService
 	{
 		this.alertMetricDao = alertMetricDao;
 	}
+	
+	public Alert findAlertById(String id){
+		return alertMetricDao.findAlertById(id);
+	}
 
 	public List<Alert> listAlerts(AlertQueryParam alertQueryParam){
 		return alertMetricDao.listAlerts(alertQueryParam);
