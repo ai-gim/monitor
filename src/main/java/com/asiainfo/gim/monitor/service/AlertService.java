@@ -8,18 +8,33 @@ import com.asiainfo.gim.monitor.entity.Alert;
 
 public class AlertService
 {
-	private AlertDao alertMetricDao;
+	private AlertDao alertDao;
 
-	public void setAlertMetricDao(AlertDao alertMetricDao)
+	public void setAlertDao(AlertDao alertDao)
 	{
-		this.alertMetricDao = alertMetricDao;
+		this.alertDao = alertDao;
+	}
+
+	public void addAlert(Alert alert){
+		alertDao.insertAlert(alert);
+	}
+
+	public Alert findAlertById(String id)
+	{
+		return alertDao.findAlertById(id);
+	}
+
+	public List<Alert> listAlerts(AlertQueryParam alertQueryParam)
+	{
+		return alertDao.listAlerts(alertQueryParam);
 	}
 	
-	public Alert findAlertById(String id){
-		return alertMetricDao.findAlertById(id);
+	public Alert updateAlert(Alert alert){
+		alertDao.updateAlert(alert);
+		return alertDao.findAlertById(alert.getId());
 	}
-
-	public List<Alert> listAlerts(AlertQueryParam alertQueryParam){
-		return alertMetricDao.listAlerts(alertQueryParam);
+	
+	public void deleteAlert(String id){
+		alertDao.deleteAlert(id);
 	}
 }

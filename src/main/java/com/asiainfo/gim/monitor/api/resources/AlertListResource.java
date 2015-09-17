@@ -19,11 +19,11 @@ import com.asiainfo.gim.monitor.service.AlertService;
 public class AlertListResource
 {
 
-	private AlertService alertMetricService;
+	private AlertService alertService;
 
 	public AlertListResource()
 	{
-		alertMetricService = SpringContext.getBean(AlertService.class);
+		alertService = SpringContext.getBean(AlertService.class);
 	}
 
 	@QueryParam("startTime")
@@ -58,7 +58,7 @@ public class AlertListResource
 		alertQueryParam.setLevel(level);
 		alertQueryParam.setStatus(status);
 		alertQueryParam.setSource(source);
-		return alertMetricService.listAlerts(alertQueryParam);
+		return alertService.listAlerts(alertQueryParam);
 	}
 
 }
