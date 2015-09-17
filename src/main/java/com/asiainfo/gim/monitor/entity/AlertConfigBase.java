@@ -3,12 +3,12 @@ package com.asiainfo.gim.monitor.entity;
 public class AlertConfigBase
 {
 	private String id;
-	private int targetType;
+	private Integer targetType;
 	private String targetId;
 	// 告警级别
-	private int level;
+	private Integer level;
 	// 告警类型(metric, heartbeat)
-	private int type;
+	private Integer type;
 
 	public String getId()
 	{
@@ -18,16 +18,6 @@ public class AlertConfigBase
 	public void setId(String id)
 	{
 		this.id = id;
-	}
-
-	public int getTargetType()
-	{
-		return targetType;
-	}
-
-	public void setTargetType(int targetType)
-	{
-		this.targetType = targetType;
 	}
 
 	public String getTargetId()
@@ -40,22 +30,32 @@ public class AlertConfigBase
 		this.targetId = targetId;
 	}
 
-	public int getLevel()
+	public Integer getTargetType()
+	{
+		return targetType;
+	}
+
+	public void setTargetType(Integer targetType)
+	{
+		this.targetType = targetType;
+	}
+
+	public Integer getLevel()
 	{
 		return level;
 	}
 
-	public void setLevel(int level)
+	public void setLevel(Integer level)
 	{
 		this.level = level;
 	}
 
-	public int getType()
+	public Integer getType()
 	{
 		return type;
 	}
 
-	public void setType(int type)
+	public void setType(Integer type)
 	{
 		this.type = type;
 	}

@@ -31,16 +31,16 @@
 		parameterType="com.asiainfo.gim.monitor.domain.query.AlertQueryParam">
 		select * from monitor_alert
 		<where>
-			<if test="targetType != 0">
+			<if test="targetType != null">
 				target_type = #{targetType}
 			</if>
 			<if test="targetId != null">
 				target_id = #{targetId}
 			</if>
-			<if test="level != 0">
+			<if test="level != null">
 				level = #{level}
 			</if>
-			<if test="status != 0">
+			<if test="status != null">
 				status = #{status}
 			</if>
 			<if test="source != null">

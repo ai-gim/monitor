@@ -7,13 +7,13 @@ public class AlertQueryParam
 	private Date startTime;
 	private Date endTime;
 	// 设备类型
-	private int targetType;
+	private Integer targetType;
 	// 设备ID
 	private String targetId;
 	// 告警级别
-	private int level;
+	private Integer level;
 	// 告警状态（是否确认状态）
-	private int status;
+	private Integer status;
 	// 告警来源
 	private String source;
 
@@ -37,16 +37,6 @@ public class AlertQueryParam
 		this.endTime = endTime;
 	}
 
-	public int getTargetType()
-	{
-		return targetType;
-	}
-
-	public void setTargetType(int targetType)
-	{
-		this.targetType = targetType;
-	}
-
 	public String getTargetId()
 	{
 		return targetId;
@@ -57,26 +47,6 @@ public class AlertQueryParam
 		this.targetId = targetId;
 	}
 
-	public int getLevel()
-	{
-		return level;
-	}
-
-	public void setLevel(int level)
-	{
-		this.level = level;
-	}
-
-	public int getStatus()
-	{
-		return status;
-	}
-
-	public void setStatus(int status)
-	{
-		this.status = status;
-	}
-
 	public String getSource()
 	{
 		return source;
@@ -85,6 +55,36 @@ public class AlertQueryParam
 	public void setSource(String source)
 	{
 		this.source = source;
+	}
+
+	public Integer getTargetType()
+	{
+		return targetType;
+	}
+
+	public void setTargetType(Integer targetType)
+	{
+		this.targetType = targetType;
+	}
+
+	public Integer getLevel()
+	{
+		return level;
+	}
+
+	public void setLevel(Integer level)
+	{
+		this.level = level;
+	}
+
+	public Integer getStatus()
+	{
+		return status;
+	}
+
+	public void setStatus(Integer status)
+	{
+		this.status = status;
 	}
 
 }

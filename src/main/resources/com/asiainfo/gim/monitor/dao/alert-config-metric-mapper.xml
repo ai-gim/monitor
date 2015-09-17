@@ -32,13 +32,13 @@
 		parameterType="com.asiainfo.gim.monitor.domain.query.AlertConfigQueryParam">
 		select * from monitor_alert_config_metric
 		<where>
-			<if test="targetType != 0">
+			<if test="targetType != null">
 				target_type = #{targetType}
 			</if>
 			<if test="targetId != null">
 				target_id = #{targetId}
 			</if>
-			<if test="level != 0">
+			<if test="level != null">
 				level = #{level}
 			</if>
 			<if test="metric != null">

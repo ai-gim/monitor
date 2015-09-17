@@ -14,14 +14,14 @@ import com.asiainfo.gim.monitor.domain.query.AlertQueryParam;
 import com.asiainfo.gim.monitor.entity.Alert;
 import com.asiainfo.gim.monitor.service.AlertService;
 
-@Path("/alert")
+@Path("/alerts")
 @Produces(MediaType.APPLICATION_JSON)
-public class AlertResource
+public class AlertListResource
 {
 
 	private AlertService alertMetricService;
 
-	public AlertResource()
+	public AlertListResource()
 	{
 		alertMetricService = SpringContext.getBean(AlertService.class);
 	}

@@ -6,10 +6,10 @@ public class Alert
 {
 	private String id;
 	private Date time;
-	private int targetType;
+	private Integer targetType;
 	private String targetId;
-	private int level;
-	private int status;
+	private Integer level;
+	private Integer status;
 	private String source;
 	private String description;
 	private String properties;
@@ -34,16 +34,6 @@ public class Alert
 		this.time = time;
 	}
 
-	public int getTargetType()
-	{
-		return targetType;
-	}
-
-	public void setTargetType(int targetType)
-	{
-		this.targetType = targetType;
-	}
-
 	public String getTargetId()
 	{
 		return targetId;
@@ -52,26 +42,6 @@ public class Alert
 	public void setTargetId(String targetId)
 	{
 		this.targetId = targetId;
-	}
-
-	public int getLevel()
-	{
-		return level;
-	}
-
-	public void setLevel(int level)
-	{
-		this.level = level;
-	}
-
-	public int getStatus()
-	{
-		return status;
-	}
-
-	public void setStatus(int status)
-	{
-		this.status = status;
 	}
 
 	public String getSource()
@@ -102,6 +72,36 @@ public class Alert
 	public void setProperties(String properties)
 	{
 		this.properties = properties;
+	}
+
+	public Integer getTargetType()
+	{
+		return targetType;
+	}
+
+	public void setTargetType(Integer targetType)
+	{
+		this.targetType = targetType;
+	}
+
+	public Integer getLevel()
+	{
+		return level;
+	}
+
+	public void setLevel(Integer level)
+	{
+		this.level = level;
+	}
+
+	public Integer getStatus()
+	{
+		return status;
+	}
+
+	public void setStatus(Integer status)
+	{
+		this.status = status;
 	}
 
 }
