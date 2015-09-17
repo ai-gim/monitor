@@ -1,10 +1,11 @@
 package com.asiainfo.gim.monitor.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.asiainfo.gim.monitor.dao.AlertConfigMetricDao;
 import com.asiainfo.gim.monitor.domain.query.AlertConfigQueryParam;
-import com.asiainfo.gim.monitor.entity.AlertConfigMetric;
+import com.asiainfo.gim.monitor.entity.AlertConfigBase;
 
 public class AlertConfigService
 {
@@ -14,9 +15,25 @@ public class AlertConfigService
 	{
 		this.alertConfigDao = alertConfigDao;
 	}
-	
-	public List<AlertConfigMetric> listAlertConfig(AlertConfigQueryParam alertConfigQueryParam){
-		return alertConfigDao.listAlertConfig(alertConfigQueryParam);
+
+	public AlertConfigBase insertAlertConfig(AlertConfigBase alertConfigBase)
+	{
+		return new AlertConfigBase();
+	}
+
+	public List<AlertConfigBase> listAlertConfig(AlertConfigQueryParam alertConfigQueryParam)
+	{
+		return new ArrayList<AlertConfigBase>();
+	}
+
+	public void updateAlertConfig(AlertConfigBase alertConfigBase)
+	{
+
+	}
+
+	public void deleteAlertConfig(String id)
+	{
+
 	}
 
 }

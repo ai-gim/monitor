@@ -8,6 +8,10 @@ public class AlertConfigMetric extends AlertConfigBase
 	private String thresholdSymbol;
 	// 告警指标
 	private String metric;
+	// 持续时间
+	private long keepTime;
+	// 恢复时间
+	private long recoverTime;
 
 	public float getThresholdValue()
 	{
@@ -37,6 +41,26 @@ public class AlertConfigMetric extends AlertConfigBase
 	public void setMetric(String metric)
 	{
 		this.metric = metric;
+	}
+
+	public long getKeepTime()
+	{
+		return keepTime;
+	}
+
+	public void setKeepTime(long keepTime)
+	{
+		this.keepTime = keepTime;
+	}
+
+	public long getRecoverTime()
+	{
+		return recoverTime;
+	}
+
+	public void setRecoverTime(long recoverTime)
+	{
+		this.recoverTime = recoverTime;
 	}
 
 }

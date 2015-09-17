@@ -15,8 +15,7 @@ public class AlertService
 		this.alertMetricDao = alertMetricDao;
 	}
 
-	public List<Alert> listAlertMetric(AlertQueryParam alertQueryParam){
-		return alertMetricDao.listAlertMetric(alertQueryParam);
+	public List<Alert> listAlerts(AlertQueryParam alertQueryParam){
+		return alertMetricDao.listAlerts(alertQueryParam);
 	}
-
 }

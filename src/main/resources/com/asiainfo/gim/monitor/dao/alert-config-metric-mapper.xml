@@ -3,8 +3,71 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.asiainfo.gim.monitor.dao.AlertConfigDao">
+<mapper namespace="com.asiainfo.gim.monitor.dao.AlertConfigMetricDao">
+	<resultMap id="alertConfigMetric"
+		type="com.asiainfo.gim.monitor.entity.AlertConfigMetric">
+		<id column="id" property="id" />
+		<result column="target_type" property="targetType" />
+		<result column="target_id" property="targetId" />
+		<result column="level" property="level" />
+		<result column="threshold_value" property="thresholdValue" />
+		<result column="threshold_symbol" property="thresholdSymbol" />
+		<result column="metric" property="metric" />
+		<result column="keep_time" property="keepTime" />
+		<result column="recover_time" property="recoverTime" />
+	</resultMap>
 
+	<insert id="insertAlertMetricConfig">
+		insert into monitor_alert_config_metric (id,
+		target_type, target_id, level,
+		threshold_value, threshold_symbol,
+		metric, keep_time, recover_time) values
+		(#{id}, #{targetType},
+		#{targetId}, #{level}, #{thresholdValue},
+		#{thresholdSymbol},
+		#{metric}, #{keepTime}, #{recoverTime})
+	</insert>
+
+	<select id="listAlertMetricConfigs" resultMap="alertConfigMetric"
+		parameterType="com.asiainfo.gim.monitor.domain.query.AlertConfigQueryParam">
+		select * from monitor_alert_config_metric
+		<where>
+			<if test="targetType != 0">
+				target_type = #{targetType}
+			</if>
+			<if test="targetId != null">
+				target_id = #{targetId}
+			</if>
+			<if test="level != 0">
+				level = #{level}
+			</if>
+			<if test="metric != null">
+				metric = #{metric}
+			</if>
+		</where>
+	</select>
+
+	<select id="findAlertMetricConfigById" resultMap="alertConfigMetric"
+		parameterType="java.lang.String">
+		select * from monitor_alert_config_metric where id =
+		#{id}
+	</select>
+
+	<update id="updateAlertMetricConfig" parameterType="com.asiainfo.gim.monitor.entity.AlertConfigMetric">
+		update
+		monitor_alert_config_metric set level = #{level}, threshold_value =
+		#{thresholdValue},
+		threshold_symbol = #{thresholdSymbol}, metric =
+		#{metric}, keep_time = #{keepTime},
+		recover_time = #{recoverTime}
+		where
+		id = #{id}
+	</update>
+
+	<delete id="deleteAlertMetricConfig" parameterType="java.lang.String">
+		delete from
+		monitor_alert_config_metric where id = #{id}
+	</delete>
 
 
 </mapper>
