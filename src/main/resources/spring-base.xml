@@ -33,4 +33,8 @@
 			</bean>
 		</property>
 	</bean>
+	
+	<bean id="serverApi" class="com.asiainfo.gim.client.server_manage.api.ServerApi">
+		<constructor-arg index="0" value="${service.server.endpoint}" />
+	</bean>
 </beans>
