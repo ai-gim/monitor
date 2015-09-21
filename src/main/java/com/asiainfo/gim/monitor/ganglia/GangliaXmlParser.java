@@ -17,8 +17,8 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.springframework.stereotype.Component;
 
-import com.asiainfo.gim.monitor.entity.Host;
-import com.asiainfo.gim.monitor.entity.Metric;
+import com.asiainfo.gim.monitor.domain.Host;
+import com.asiainfo.gim.monitor.domain.Metric;
 @Component
 public class GangliaXmlParser
 {

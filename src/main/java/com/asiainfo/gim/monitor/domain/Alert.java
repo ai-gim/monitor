@@ -1,6 +1,7 @@
-package com.asiainfo.gim.monitor.entity;
+package com.asiainfo.gim.monitor.domain;
 
 import java.util.Date;
+import java.util.Map;
 
 public class Alert
 {
@@ -12,7 +13,7 @@ public class Alert
 	private Integer status;
 	private String source;
 	private String description;
-	private String properties;
+	private Map<String, String> properties;
 
 	public String getId()
 	{
@@ -64,12 +65,12 @@ public class Alert
 		this.description = description;
 	}
 
-	public String getProperties()
+	public Map<String, String> getProperties()
 	{
 		return properties;
 	}
 
-	public void setProperties(String properties)
+	public void setProperties(Map<String, String> properties)
 	{
 		this.properties = properties;
 	}

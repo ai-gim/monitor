@@ -13,8 +13,8 @@ import org.apache.commons.lang.StringUtils;
 
 import com.asiainfo.gim.common.rest.exception.ValidationException;
 import com.asiainfo.gim.common.spring.SpringContext;
+import com.asiainfo.gim.monitor.domain.Metric;
 import com.asiainfo.gim.monitor.domain.query.MetricQueryParam;
-import com.asiainfo.gim.monitor.entity.Metric;
 import com.asiainfo.gim.monitor.service.MetricService;
 
 /**

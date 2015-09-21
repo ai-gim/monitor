@@ -1,4 +1,4 @@
-package com.asiainfo.gim.monitor.base;
+package com.asiainfo.gim.monitor.task;
 
 import javax.annotation.Resource;
 

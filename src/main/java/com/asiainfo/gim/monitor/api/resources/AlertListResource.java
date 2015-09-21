@@ -10,8 +10,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.asiainfo.gim.common.spring.SpringContext;
+import com.asiainfo.gim.monitor.domain.Alert;
 import com.asiainfo.gim.monitor.domain.query.AlertQueryParam;
-import com.asiainfo.gim.monitor.entity.Alert;
 import com.asiainfo.gim.monitor.service.AlertService;
 
 @Path("/alerts")

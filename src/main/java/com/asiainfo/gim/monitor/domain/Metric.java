@@ -1,4 +1,4 @@
-package com.asiainfo.gim.monitor.entity;
+package com.asiainfo.gim.monitor.domain;
 
 import java.util.Date;
 

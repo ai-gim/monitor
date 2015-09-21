@@ -1,5 +1,5 @@
 /**   
- * @Title: ServerApplication.java 
+ * @Title: MonitorApplication.java 
  * @Package com.asiainfo.gim.auth 
  * @Description: TODO(用一句话描述该文件做什么) 
  * @author zhangli
@@ -20,9 +20,9 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
  * @author zhangli
  *
  */
-public class ServerApplication extends ResourceConfig
+public class MonitorApplication extends ResourceConfig
 {
-	public ServerApplication()
+	public MonitorApplication()
 	{
 		packages("com.asiainfo.gim.monitor.api.resources");
 

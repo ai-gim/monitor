@@ -29,7 +29,7 @@ public class Main
 		int port = NumberUtils.toInt(SpringContext.getProperty("service.monitor.port"), 9004);
 
 		URI baseUri = UriBuilder.fromUri("http://" + host).port(port).build();
-		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, new ServerApplication());
+		HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, new MonitorApplication());
 		server.start();
 
 	}

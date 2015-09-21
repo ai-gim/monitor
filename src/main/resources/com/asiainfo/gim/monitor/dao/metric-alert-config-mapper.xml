@@ -3,9 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.asiainfo.gim.monitor.dao.AlertConfigMetricDao">
+<mapper namespace="com.asiainfo.gim.monitor.dao.MetricAlertConfigDao">
 	<resultMap id="alertConfigMetric"
-		type="com.asiainfo.gim.monitor.entity.AlertConfigMetric">
+		type="com.asiainfo.gim.monitor.domain.MetricAlertConfig">
 		<id column="id" property="id" />
 		<result column="target_type" property="targetType" />
 		<result column="target_id" property="targetId" />
@@ -28,32 +28,16 @@
 		#{metric}, #{keepTime}, #{recoverTime})
 	</insert>
 
-	<select id="listAlertMetricConfigs" resultMap="alertConfigMetric"
-		parameterType="com.asiainfo.gim.monitor.domain.query.AlertConfigQueryParam">
-		select * from monitor_alert_config_metric
-		<where>
-			<if test="targetType != null">
-				target_type = #{targetType}
-			</if>
-			<if test="targetId != null">
-				target_id = #{targetId}
-			</if>
-			<if test="level != null">
-				level = #{level}
-			</if>
-			<if test="metric != null">
-				metric = #{metric}
-			</if>
-		</where>
+	<select id="listMetricAlertConfigs" resultMap="alertConfigMetric">
+		select * from monitor_alert_config_metric order by target_id asc;
 	</select>
 
 	<select id="findAlertMetricConfigById" resultMap="alertConfigMetric"
 		parameterType="java.lang.String">
-		select * from monitor_alert_config_metric where id =
-		#{id}
+		select * from monitor_alert_config_metric where id = #{id}
 	</select>
 
-	<update id="updateAlertMetricConfig" parameterType="com.asiainfo.gim.monitor.entity.AlertConfigMetric">
+	<update id="updateAlertMetricConfig" parameterType="com.asiainfo.gim.monitor.domain.MetricAlertConfig">
 		update
 		monitor_alert_config_metric set level = #{level}, threshold_value =
 		#{thresholdValue},
