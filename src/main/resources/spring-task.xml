@@ -35,9 +35,9 @@
 		<property name="jobDetail" ref="gangliaDataFecthJobDetail"></property>
 		<property name="repeatInterval" value="${ganglia.fetch.task.interval}"></property>
 	</bean>
-	<bean id="gangliaDataCleanJobTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+	<bean id="gangliaDataCleanJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
 		<property name="jobDetail" ref="gangliaDataCleanJobDetail"></property>
-		<property name="repeatInterval" value="86400000"></property>
+		<property name="cronExpression" value="0 0 4 * * ?"></property>
 	</bean>
 	
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
