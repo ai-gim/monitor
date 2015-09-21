@@ -5,18 +5,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.asiainfo.gim.common.spring.SpringContext;
-import com.asiainfo.gim.monitor.service.AlertConfigMetricService;
+import com.asiainfo.gim.monitor.service.MetricAlertConfigService;
 
 @Path("/alertConfigs")
 @Produces(MediaType.APPLICATION_JSON)
 public class AlertConfigResource
 {
 
-	private AlertConfigMetricService alertConfigService;
+	private MetricAlertConfigService alertConfigService;
 
 	public AlertConfigResource()
 	{
-		alertConfigService = SpringContext.getBean(AlertConfigMetricService.class);
+		alertConfigService = SpringContext.getBean(MetricAlertConfigService.class);
 	}
 
 }

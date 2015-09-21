@@ -34,8 +34,8 @@ import com.asiainfo.gim.monitor.dao.NetworkPktsInDao;
 import com.asiainfo.gim.monitor.dao.NetworkPktsOutDao;
 import com.asiainfo.gim.monitor.dao.ProcRunDao;
 import com.asiainfo.gim.monitor.dao.ProcTotalDao;
+import com.asiainfo.gim.monitor.domain.Metric;
 import com.asiainfo.gim.monitor.domain.query.MetricQueryParam;
-import com.asiainfo.gim.monitor.entity.Metric;
 
 @Service
 public class MetricService

@@ -21,10 +21,10 @@
 		<property name="targetMethod" value="doCollect"></property>
 	</bean>
 	
-	<bean id="gangliaDataCleanJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	<bean id="metricDataCleanJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="concurrent" value="false" />
 		<property name="targetObject">
-			<bean class="com.asiainfo.gim.monitor.task.GangliaDataCleanJob">
+			<bean class="com.asiainfo.gim.monitor.task.MetricDataCleanJob">
 				<property name="keepDuration" value="${data.keep.duration}"></property>
 			</bean>
 		</property>
@@ -35,8 +35,8 @@
 		<property name="jobDetail" ref="gangliaDataFecthJobDetail"></property>
 		<property name="repeatInterval" value="${ganglia.fetch.task.interval}"></property>
 	</bean>
-	<bean id="gangliaDataCleanJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-		<property name="jobDetail" ref="gangliaDataCleanJobDetail"></property>
+	<bean id="metricDataCleanJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="metricDataCleanJobDetail"></property>
 		<property name="cronExpression" value="0 0 4 * * ?"></property>
 	</bean>
 	
@@ -44,7 +44,7 @@
 		<property name="triggers">
 			<list>
 				<ref bean="gangliaDataFecthJobTrigger" />
-				<ref bean="gangliaDataCleanJobTrigger" />
+				<ref bean="metricDataCleanJobTrigger" />
 			</list>
 		</property>
 	</bean>

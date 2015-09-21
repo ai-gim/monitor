@@ -2,10 +2,9 @@ package com.asiainfo.gim.monitor.task;
 
 import java.util.Date;
 
-import com.asiainfo.gim.monitor.base.DaoCollection;
 import com.asiainfo.gim.monitor.domain.delete.MetricDeleteParam;
 
-public class GangliaDataCleanJob extends DaoCollection
+public class MetricDataCleanJob extends DaoCollection
 {
 
 	//历史数据保留的天数（以天为单位）
