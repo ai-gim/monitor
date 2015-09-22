@@ -67,14 +67,14 @@ public class MetricAlertChecker extends AlertChecker<Float>
 		return null;
 	}
 
-	public String doCheckConfirm(Float value)
+	public Alert doCheckConfirm(Float value)
 	{
 		Alert alert = findCurrentAlert();
 		if (!isOverThreshold(value) && alert != null)
 		{
 			if (System.currentTimeMillis() - recordTimeRecover > alertConfig.getRecoverTime())
 			{
-				return alert.getId();
+				return alert;
 			}
 		}
 		else
@@ -122,30 +122,60 @@ public class MetricAlertChecker extends AlertChecker<Float>
 		{
 			if(StringUtils.equals(alertConfig.getThresholdSymbol(), ">"))
 			{
-				return "CPU使用率超过 " + value + "%";
+				return "CPU使用率超过 " + alertConfig.getThresholdValue() + "%";
 			}
 			else if(StringUtils.equals(alertConfig.getThresholdSymbol(), "<"))
 			{
-				return "CPU使用率低于 " + value + "%";
+				return "CPU使用率低于 " + alertConfig.getThresholdValue() + "%";
 			}
 			else
 			{
-				return "CPU使用率等于 " + value + "%";
+				return "CPU使用率等于 " + alertConfig.getThresholdValue() + "%";
+			}
+		}
+		else if(StringUtils.equals(alertConfig.getMetric(), "mem_usage"))
+		{
+			if(StringUtils.equals(alertConfig.getThresholdSymbol(), ">"))
+			{
+				return "内存使用率超过 " + alertConfig.getThresholdValue() + "%";
+			}
+			else if(StringUtils.equals(alertConfig.getThresholdSymbol(), "<"))
+			{
+				return "内存使用率低于 " + alertConfig.getThresholdValue() + "%";
+			}
+			else
+			{
+				return "内存使用率等于 " + alertConfig.getThresholdValue() + "%";
+			}
+		}
+		else if(StringUtils.equals(alertConfig.getMetric(), "disk_usage"))
+		{
+			if(StringUtils.equals(alertConfig.getThresholdSymbol(), ">"))
+			{
+				return "磁盘使用率超过 " + alertConfig.getThresholdValue() + "%";
+			}
+			else if(StringUtils.equals(alertConfig.getThresholdSymbol(), "<"))
+			{
+				return "磁盘使用率低于 " + alertConfig.getThresholdValue() + "%";
+			}
+			else
+			{
+				return "磁盘使用率等于 " + alertConfig.getThresholdValue() + "%";
 			}
 		}
 		else
 		{
 			if(StringUtils.equals(alertConfig.getThresholdSymbol(), ">"))
 			{
-				return alertConfig.getMetric() + "超过" + value + "%";
+				return alertConfig.getMetric() + "超过" + alertConfig.getThresholdValue() + "%";
 			}
 			else if(StringUtils.equals(alertConfig.getThresholdSymbol(), "<"))
 			{
-				return alertConfig.getMetric() + "低于" + value + "%";
+				return alertConfig.getMetric() + "低于" + alertConfig.getThresholdValue() + "%";
 			}
 			else
 			{
-				return alertConfig.getMetric() + "等于" + value + "%";
+				return alertConfig.getMetric() + "等于" + alertConfig.getThresholdValue() + "%";
 			}
 		}
 	}

@@ -27,10 +27,10 @@ public abstract class AlertChecker<T>
 			sendAlert(alert);
 		}
 
-		String currentAlertId = doCheckConfirm(obj);
-		if (currentAlertId != null)
+		alert = doCheckConfirm(obj);
+		if (alert != null)
 		{
-
+			confirmAlert(alert);
 		}
 	}
 
@@ -44,10 +44,11 @@ public abstract class AlertChecker<T>
 
 	public void confirmAlert(Alert alert)
 	{
-		System.out.println(alert);
+		AlertService alertService = (AlertService)SpringContext.getBean("alertService");
+		alertService.confirmAlert(alert);
 	}
 
 	public abstract Alert doCheckAlert(T obj);
 
-	public abstract String doCheckConfirm(T obj);
+	public abstract Alert doCheckConfirm(T obj);
 }

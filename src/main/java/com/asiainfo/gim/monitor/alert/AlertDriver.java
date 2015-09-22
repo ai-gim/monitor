@@ -20,6 +20,7 @@ import com.asiainfo.gim.client.ClientContext;
 import com.asiainfo.gim.client.server_manage.api.ServerApi;
 import com.asiainfo.gim.client.server_manage.domain.Server;
 import com.asiainfo.gim.monitor.Constants;
+import com.asiainfo.gim.monitor.Constants.ResourceType;
 import com.asiainfo.gim.monitor.alert.checker.MetricAlertChecker;
 import com.asiainfo.gim.monitor.domain.Host;
 import com.asiainfo.gim.monitor.domain.Metric;
@@ -60,17 +61,60 @@ public class AlertDriver
 		{
 			Server server = serverMap.get(host.getIp());
 
+			// cpu使用率
 			if (host.getMetrics().containsKey("cpu_idle"))
 			{
 				Metric metric = host.getMetrics().get("cpu_idle");
 				if (metric.getTn() < 20)
 				{
-					String key = "metric-1" + server.getId() + "cpu_usage";
-					Float value = (Float)metric.getValue();
-					if(alertCheckerCache.get(key) != null)
+					String key = "metric-" + ResourceType.SERVER + server.getId() + "cpu_usage";
+					Float value = (Float) metric.getValue();
+					if (alertCheckerCache.get(key) != null)
 					{
-						MetricAlertChecker alertChecker = (MetricAlertChecker)alertCheckerCache.get(key);
+						MetricAlertChecker alertChecker = (MetricAlertChecker) alertCheckerCache.get(key);
 						alertChecker.check(100 - value);
+					}
+				}
+			}
+
+			// 内存使用率
+			if (host.getMetrics().containsKey("mem_total") && host.getMetrics().containsKey("mem_free"))
+			{
+				Metric memTotalMetric = host.getMetrics().get("mem_total");
+				Metric memFreeMetric = host.getMetrics().get("mem_free");
+				if (memFreeMetric.getTn() < 20)
+				{
+					String key = "metric-" + ResourceType.SERVER + server.getId() + "mem_usage";
+					Float memTotal = (Float) memTotalMetric.getValue();
+					Float memFree = (Float) memFreeMetric.getValue();
+
+					Float value = (memTotal - memFree) / memTotal;
+
+					if (alertCheckerCache.get(key) != null)
+					{
+						MetricAlertChecker alertChecker = (MetricAlertChecker) alertCheckerCache.get(key);
+						alertChecker.check(value);
+					}
+				}
+			}
+
+			// 磁盘使用率
+			if (host.getMetrics().containsKey("disk_total") && host.getMetrics().containsKey("disk_free"))
+			{
+				Metric diskTotalMetric = host.getMetrics().get("disk_total");
+				Metric diskFreeMetric = host.getMetrics().get("disk_free");
+				if (diskFreeMetric.getTn() < 20)
+				{
+					String key = "metric-" + ResourceType.SERVER + server.getId() + "disk_usage";
+					Float diskTotal = (Float) diskTotalMetric.getValue();
+					Float diskFree = (Float) diskFreeMetric.getValue();
+
+					Float value = (diskTotal - diskFree) / diskTotal;
+
+					if (alertCheckerCache.get(key) != null)
+					{
+						MetricAlertChecker alertChecker = (MetricAlertChecker) alertCheckerCache.get(key);
+						alertChecker.check(value);
 					}
 				}
 			}
