@@ -25,7 +25,7 @@ public class MetricAlertConfigService
 		metricAlertConfigDao.insertMetricAlertConfig(metricAlertConfig);
 	}
 
-	public MetricAlertConfig getAlertMetricConfigById(String id)
+	public MetricAlertConfig getAlertMetricConfigById(int id)
 	{
 		return metricAlertConfigDao.findMetricAlertConfigById(id);
 	}

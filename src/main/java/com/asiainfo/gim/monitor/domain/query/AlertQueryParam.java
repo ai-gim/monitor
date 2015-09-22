@@ -17,6 +17,8 @@ public class AlertQueryParam
 	// 告警来源
 	private String source;
 
+	private Integer configId;
+
 	public Date getStartTime()
 	{
 		return startTime;
@@ -85,6 +87,16 @@ public class AlertQueryParam
 	public void setStatus(Integer status)
 	{
 		this.status = status;
+	}
+
+	public Integer getConfigId()
+	{
+		return configId;
+	}
+
+	public void setConfigId(Integer configId)
+	{
+		this.configId = configId;
 	}
 
 }

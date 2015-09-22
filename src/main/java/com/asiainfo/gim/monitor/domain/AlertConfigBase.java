@@ -2,7 +2,7 @@ package com.asiainfo.gim.monitor.domain;
 
 public class AlertConfigBase
 {
-	private String id;
+	private Integer id;
 	private Integer targetType;
 	private String targetId;
 	// 告警级别
@@ -10,12 +10,12 @@ public class AlertConfigBase
 	// 告警类型(metric, heartbeat)
 	private Integer type;
 
-	public String getId()
+	public Integer getId()
 	{
 		return id;
 	}
 
-	public void setId(String id)
+	public void setId(Integer id)
 	{
 		this.id = id;
 	}

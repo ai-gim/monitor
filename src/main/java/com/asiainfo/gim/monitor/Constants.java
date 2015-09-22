@@ -8,4 +8,11 @@ public interface Constants
 	{
 		public static final String SERVER_REPORT_EXCHANGE = "server_report_exchange";
 	}
+	
+
+	public static interface AlertStatus
+	{
+		public static final int NEW = 0;
+		public static final int CONFIRMED = 1; 
+	}
 }
