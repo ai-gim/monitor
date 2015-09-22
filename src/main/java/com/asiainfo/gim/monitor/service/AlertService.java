@@ -1,11 +1,14 @@
 package com.asiainfo.gim.monitor.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.asiainfo.gim.monitor.Constants.AlertStatus;
 import com.asiainfo.gim.monitor.dao.AlertDao;
 import com.asiainfo.gim.monitor.domain.Alert;
 import com.asiainfo.gim.monitor.domain.query.AlertQueryParam;
@@ -24,6 +27,10 @@ public class AlertService
 	public void addAlert(Alert alert)
 	{
 		alert.setStatus(0);
+		if(StringUtils.isEmpty(alert.getId()))
+		{
+			alert.setId(UUID.randomUUID().toString());
+		}
 		alertDao.insertAlert(alert);
 	}
 
@@ -36,11 +43,11 @@ public class AlertService
 	{
 		return alertDao.listAlerts(alertQueryParam);
 	}
-
-	public Alert updateAlert(Alert alert)
+	
+	public void confirmAlert(Alert alert)
 	{
+		alert.setStatus(AlertStatus.CONFIRMED);
 		alertDao.updateAlert(alert);
-		return alertDao.findAlertById(alert.getId());
 	}
 
 	public void deleteAlert(String id)
