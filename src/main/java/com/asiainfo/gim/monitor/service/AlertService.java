@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.asiainfo.gim.monitor.alert.CurrentAlertCache;
 import com.asiainfo.gim.monitor.dao.AlertDao;
 import com.asiainfo.gim.monitor.domain.Alert;
 import com.asiainfo.gim.monitor.domain.query.AlertQueryParam;
@@ -15,13 +14,6 @@ import com.asiainfo.gim.monitor.domain.query.AlertQueryParam;
 public class AlertService
 {
 	private AlertDao alertDao;
-	private CurrentAlertCache currentAlertCache;
-
-	@Resource
-	public void setCurrentAlertCache(CurrentAlertCache currentAlertCache)
-	{
-		this.currentAlertCache = currentAlertCache;
-	}
 
 	@Resource
 	public void setAlertDao(AlertDao alertDao)
@@ -33,7 +25,6 @@ public class AlertService
 	{
 		alert.setStatus(0);
 		alertDao.insertAlert(alert);
-		currentAlertCache.put(alert);
 	}
 
 	public Alert findAlertById(String id)

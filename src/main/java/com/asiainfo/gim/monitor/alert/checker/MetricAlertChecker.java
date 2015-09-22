@@ -9,14 +9,16 @@
 package com.asiainfo.gim.monitor.alert.checker;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.asiainfo.gim.common.spring.SpringContext;
-import com.asiainfo.gim.monitor.alert.CurrentAlertCache;
 import com.asiainfo.gim.monitor.domain.Alert;
 import com.asiainfo.gim.monitor.domain.MetricAlertConfig;
+import com.asiainfo.gim.monitor.domain.query.AlertQueryParam;
+import com.asiainfo.gim.monitor.service.AlertService;
 
 /**
  * @author zhangli
@@ -25,10 +27,9 @@ import com.asiainfo.gim.monitor.domain.MetricAlertConfig;
 public class MetricAlertChecker extends AlertChecker<Float>
 {
 	private MetricAlertConfig alertConfig;
-	
-	
-	private String currentAlertId;
-	private long firstRecordTime;
+
+	private long recordTimeAlert;
+	private long recordTimeRecover;
 
 	public void setAlertConfig(MetricAlertConfig alertConfig)
 	{
@@ -38,73 +39,114 @@ public class MetricAlertChecker extends AlertChecker<Float>
 	@Override
 	public Alert doCheckAlert(Float value)
 	{
-		CurrentAlertCache alertCache = (CurrentAlertCache)SpringContext.getBean("currentAlertCache");
-		if(StringUtils.isEmpty(currentAlertId) || alertCache.get(currentAlertId) == null)
+		if(isOverThreshold(value) && findCurrentAlert() == null)
 		{
-			if(isOverThreshold(value))
+			if(recordTimeAlert == 0)
 			{
-				if(firstRecordTime == 0)
-				{
-					firstRecordTime = System.currentTimeMillis();
-				}
-				else if(System.currentTimeMillis() - firstRecordTime > alertConfig.getKeepTime() * 1000)
-				{
-					Alert alert = new Alert();
-					alert.setId(UUID.randomUUID().toString());
-					alert.setLevel(alertConfig.getLevel());
-					alert.setSource("AIOM");
-					alert.setTime(Calendar.getInstance().getTime());
-					alert.setTargetType(alertConfig.getTargetType());
-					alert.setTargetId(alertConfig.getTargetId());
-					return alert;
-				}
+				recordTimeAlert = System.currentTimeMillis();
 			}
-			else
+			else if(System.currentTimeMillis() - recordTimeAlert > alertConfig.getKeepTime() * 1000)
 			{
-				firstRecordTime = 0;
+				Alert alert = new Alert();
+				alert.setId(UUID.randomUUID().toString());
+				alert.setLevel(alertConfig.getLevel());
+				alert.setSource("AIOM");
+				alert.setTime(Calendar.getInstance().getTime());
+				alert.setTargetType(alertConfig.getTargetType());
+				alert.setTargetId(alertConfig.getTargetId());
+				alert.setConfigId(alertConfig.getId());
+				alert.setDescription(getDescription(value));
+				return alert;
 			}
+		}
+		else
+		{
+			recordTimeAlert = 0;
 		}
 		
 		return null;
 	}
-	
+
 	public String doCheckConfirm(Float value)
 	{
-		CurrentAlertCache alertCache = (CurrentAlertCache)SpringContext.getBean("currentAlertCache");
-		if(StringUtils.isNotEmpty(currentAlertId) && alertCache.get(currentAlertId) != null)
+		Alert alert = findCurrentAlert();
+		if (!isOverThreshold(value) && alert != null)
 		{
-			if(!isOverThreshold(value))
+			if (System.currentTimeMillis() - recordTimeRecover > alertConfig.getRecoverTime())
 			{
-				if(System.currentTimeMillis() - firstRecordTime > alertConfig.getKeepTime())
-				{
-					return currentAlertId;
-				}
+				return alert.getId();
 			}
-			else
-			{
-				firstRecordTime = 0;
-			}
+		}
+		else
+		{
+			recordTimeRecover = 0;
 		}
 		return null;
 	}
-	
+
 	private boolean isOverThreshold(float value)
 	{
-		if(StringUtils.equals(alertConfig.getThresholdSymbol(), ">") && value > alertConfig.getThresholdValue())
+		if (StringUtils.equals(alertConfig.getThresholdSymbol(), ">") && value > alertConfig.getThresholdValue())
 		{
 			return true;
 		}
-		else if(StringUtils.equals(alertConfig.getThresholdSymbol(), "<") && value < alertConfig.getThresholdValue())
+		else if (StringUtils.equals(alertConfig.getThresholdSymbol(), "<") && value < alertConfig.getThresholdValue())
 		{
 			return true;
 		}
-		else if(StringUtils.equals(alertConfig.getThresholdSymbol(), "=") && value == alertConfig.getThresholdValue())
+		else if (StringUtils.equals(alertConfig.getThresholdSymbol(), "=") && value == alertConfig.getThresholdValue())
 		{
 			return true;
 		}
 		else
 		{
 			return false;
+		}
+	}
+
+	private Alert findCurrentAlert()
+	{
+		AlertService alertService = (AlertService) SpringContext.getBean("alertService");
+		AlertQueryParam alertQueryParam = new AlertQueryParam();
+		alertQueryParam.setConfigId(alertConfig.getId());
+		alertQueryParam.setTargetType(alertConfig.getTargetType());
+		alertQueryParam.setTargetId(alertConfig.getTargetId());
+
+		List<Alert> alerts = alertService.listAlerts(alertQueryParam);
+		return alerts.size() > 0 ? alerts.get(0) : null;
+	}
+	
+	public String getDescription(float value)
+	{
+		if(StringUtils.equals(alertConfig.getMetric(), "cpu_usage"))
+		{
+			if(StringUtils.equals(alertConfig.getThresholdSymbol(), ">"))
+			{
+				return "CPU使用率超过 " + value + "%";
+			}
+			else if(StringUtils.equals(alertConfig.getThresholdSymbol(), "<"))
+			{
+				return "CPU使用率低于 " + value + "%";
+			}
+			else
+			{
+				return "CPU使用率等于 " + value + "%";
+			}
+		}
+		else
+		{
+			if(StringUtils.equals(alertConfig.getThresholdSymbol(), ">"))
+			{
+				return alertConfig.getMetric() + "超过" + value + "%";
+			}
+			else if(StringUtils.equals(alertConfig.getThresholdSymbol(), "<"))
+			{
+				return alertConfig.getMetric() + "低于" + value + "%";
+			}
+			else
+			{
+				return alertConfig.getMetric() + "等于" + value + "%";
+			}
 		}
 	}
 }

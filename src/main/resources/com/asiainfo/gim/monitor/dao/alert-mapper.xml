@@ -13,41 +13,44 @@
 		<result property="description" column="description" />
 		<result property="status" column="status" />
 		<result property="source" column="source" />
+		<result property="configId" column="config_id" />
 		<result property="properties" column="properties" javaType="java.util.Map" jdbcType="VARCHAR"/>
 	</resultMap>
 
 	<insert id="insertAlert" parameterType="com.asiainfo.gim.monitor.domain.Alert">
-		insert into monitor_alert (id, time, target_type, target_id, level, description, status, source, properties) 
-			values (#{id}, #{time}, #{targetType}, #{targetId}, #{level}, #{description}, #{status}, #{source}, #{properties, jdbcType=VARCHAR})
+		insert into monitor_alert (id, time, target_type, target_id, level, description, status, source, config_id, properties) 
+			values (#{id}, #{time}, #{targetType}, #{targetId}, #{level}, #{description}, #{status}, #{source}, #{configId}, #{properties, jdbcType=VARCHAR})
 	</insert>
 
-	<select id="listAlerts" resultMap="alert"
-		parameterType="com.asiainfo.gim.monitor.domain.query.AlertQueryParam">
+	<select id="listAlerts" resultMap="alert" parameterType="com.asiainfo.gim.monitor.domain.query.AlertQueryParam">
 		select * from monitor_alert
 		<where>
 			<if test="targetType != null">
 				target_type = #{targetType}
 			</if>
 			<if test="targetId != null">
-				target_id = #{targetId}
+				and target_id = #{targetId}
 			</if>
 			<if test="level != null">
-				level = #{level}
+				and level = #{level}
 			</if>
 			<if test="status != null">
-				status = #{status}
+				and status = #{status}
+			</if>
+			<if test="configId != null">
+				and config_id = #{configId}
 			</if>
 			<if test="source != null">
-				source = #{source}
+				and source = #{source}
 			</if>
 			<if test="startTime != null and endTime != null">
-				time between #{startTime} and #{endTime}
+				and time between #{startTime} and #{endTime}
 			</if>
 			<if test="startTime != null and endTime == null">
-				time &lt; #{startTime}
+				and time &lt; #{startTime}
 			</if>
 			<if test="startTime == null and endTime != null">
-				time &gt; #{endTime}
+				and time &gt; #{endTime}
 			</if>
 		</where>
 	</select>

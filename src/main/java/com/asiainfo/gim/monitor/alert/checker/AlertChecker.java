@@ -9,6 +9,7 @@
 package com.asiainfo.gim.monitor.alert.checker;
 
 import com.asiainfo.gim.common.spring.SpringContext;
+import com.asiainfo.gim.monitor.Constants.AlertStatus;
 import com.asiainfo.gim.monitor.domain.Alert;
 import com.asiainfo.gim.monitor.service.AlertService;
 
@@ -36,6 +37,8 @@ public abstract class AlertChecker<T>
 	public void sendAlert(Alert alert)
 	{
 		AlertService alertService = (AlertService)SpringContext.getBean("alertService");
+		
+		alert.setStatus(AlertStatus.NEW);
 		alertService.addAlert(alert);
 	}
 

@@ -11,7 +11,7 @@ public interface MetricAlertConfigDao
 
 	public List<MetricAlertConfig> listMetricAlertConfigs();
 
-	public MetricAlertConfig findMetricAlertConfigById(String id);
+	public MetricAlertConfig findMetricAlertConfigById(int id);
 
 	public void updateMetricAlertConfig(MetricAlertConfig metricAlertConfig);
 
