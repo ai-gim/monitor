@@ -43,16 +43,17 @@
 			<if test="source != null">
 				and source = #{source}
 			</if>
-			<if test="startTime != null and endTime != null">
-				and time between #{startTime} and #{endTime}
+			<if test="startTime != null">
+				and time &gt;= #{startTime}
 			</if>
-			<if test="startTime != null and endTime == null">
-				and time &lt; #{startTime}
-			</if>
-			<if test="startTime == null and endTime != null">
-				and time &gt; #{endTime}
+			<if test="endTime != null">
+				and time &lt;= #{endTime}
 			</if>
 		</where>
+		order by time desc 
+		<if test="limit != 0">
+			limit #{limit} offset #{start}
+		</if>
 	</select>
 
 	<select id="findAlertById" resultMap="alert" parameterType="java.lang.String">
