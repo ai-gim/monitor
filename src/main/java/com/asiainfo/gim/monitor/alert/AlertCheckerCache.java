@@ -14,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Resource;
 
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -23,10 +25,15 @@ import com.asiainfo.gim.client.ClientContext;
 import com.asiainfo.gim.client.server_manage.api.ServerApi;
 import com.asiainfo.gim.client.server_manage.domain.Server;
 import com.asiainfo.gim.monitor.Constants;
+import com.asiainfo.gim.monitor.Constants.AlertConfigType;
+import com.asiainfo.gim.monitor.Constants.AlertConfigTypeClass;
 import com.asiainfo.gim.monitor.alert.checker.AlertChecker;
 import com.asiainfo.gim.monitor.alert.checker.MetricAlertChecker;
+import com.asiainfo.gim.monitor.domain.AlertConfig;
 import com.asiainfo.gim.monitor.domain.MetricAlertConfig;
-import com.asiainfo.gim.monitor.service.MetricAlertConfigService;
+import com.asiainfo.gim.monitor.domain.query.AlertConfigQueryParam;
+import com.asiainfo.gim.monitor.service.AlertConfigService;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 
 /**
  * @author zhangli
@@ -36,13 +43,13 @@ import com.asiainfo.gim.monitor.service.MetricAlertConfigService;
 public class AlertCheckerCache implements InitializingBean
 {
 	private Map<String, AlertChecker<? extends Object>> alertCheckerMap;
-	private MetricAlertConfigService metricAlertConfigService;
+	private AlertConfigService alertConfigService;
 	private ServerApi serverApi;
 
 	@Resource
-	public void setMetricAlertConfigService(MetricAlertConfigService metricAlertConfigService)
+	public void setAlertConfigService(AlertConfigService alertConfigService)
 	{
-		this.metricAlertConfigService = metricAlertConfigService;
+		this.alertConfigService = alertConfigService;
 	}
 
 	@Resource
@@ -50,6 +57,7 @@ public class AlertCheckerCache implements InitializingBean
 	{
 		this.serverApi = serverApi;
 	}
+
 
 	@Override
 	public void afterPropertiesSet() throws Exception
@@ -64,33 +72,38 @@ public class AlertCheckerCache implements InitializingBean
 	{
 		ClientContext.setToken(Constants.INTERNAL_TOKEN);
 		List<Server> servers = serverApi.listServers();
-		List<MetricAlertConfig> alertConfigs = metricAlertConfigService.listMetricAlertConfigs();
-
-		for (MetricAlertConfig alertConfig : alertConfigs)
+		AlertConfigQueryParam alertConfigQueryParam = new AlertConfigQueryParam();
+		alertConfigQueryParam.setType(AlertConfigType.METRIC_ALERT_CONFIG);
+		List<AlertConfig> alertConfigs = alertConfigService.listAlertConfigs(alertConfigQueryParam);
+		
+		for (AlertConfig alertConfig : alertConfigs)
 		{
-			if (StringUtils.isEmpty(alertConfig.getTargetId()))
+			JSONObject jsonObject = JSONObject.fromObject(alertConfig.getProperties());
+			MetricAlertConfig metricAlertConfig = (MetricAlertConfig) JSONObject.toBean(jsonObject, MetricAlertConfig.class);
+			BeanUtils.copyProperties(alertConfig, metricAlertConfig);
+			if (StringUtils.isEmpty(metricAlertConfig.getTargetId()))
 			{
 				for (Server server : servers)
 				{
 					MetricAlertConfig alertConfigClone = new MetricAlertConfig();
-					BeanUtils.copyProperties(alertConfig, alertConfigClone);
+					BeanUtils.copyProperties(metricAlertConfig, alertConfigClone);
 					alertConfigClone.setTargetId(server.getId());
 
 					MetricAlertChecker alertChecker = new MetricAlertChecker();
 					alertChecker.setAlertConfig(alertConfigClone);
 
 					alertCheckerMap.put(
-							"metric-" + alertConfig.getTargetType() + server.getId() + alertConfig.getMetric(),
+							"metric-" + metricAlertConfig.getTargetType() + server.getId() + metricAlertConfig.getMetric(),
 							alertChecker);
 				}
 			}
 			else
 			{
 				MetricAlertChecker alertChecker = new MetricAlertChecker();
-				alertChecker.setAlertConfig(alertConfig);
+				alertChecker.setAlertConfig(metricAlertConfig);
 
 				alertCheckerMap.put(
-						"metric-" + alertConfig.getTargetType() + alertConfig.getTargetId() + alertConfig.getMetric(),
+						"metric-" + metricAlertConfig.getTargetType() + metricAlertConfig.getTargetId() + metricAlertConfig.getMetric(),
 						alertChecker);
 			}
 		}

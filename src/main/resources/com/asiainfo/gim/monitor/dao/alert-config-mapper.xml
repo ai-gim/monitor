@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.asiainfo.gim.monitor.dao.AlertConfigDao">
+	<resultMap id="alertConfig"
+		type="com.asiainfo.gim.monitor.domain.AlertConfig">
+		<id column="id" property="id" />
+		<result column="target_type" property="targetType" />
+		<result column="target_id" property="targetId" />
+		<result column="level" property="level" />
+		<result column="type" property="type" />
+		<result column="properties" property="properties" />
+	</resultMap>
+
+	<insert id="insertAlertConfig" parameterType="com.asiainfo.gim.monitor.domain.AlertConfig"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		monitor_alert_config (target_type, target_id, level, type, properties)
+		values
+		(#{targetType}, #{targetId}, #{level}, #{type}, #{properties})
+	</insert>
+
+	<select id="listAlertConfigs" resultMap="alertConfig" parameterType="com.asiainfo.gim.monitor.domain.query.AlertConfigQueryParam">
+		select * from
+		monitor_alert_config 
+		<where>
+		  	<if test="targetType != null">
+		  	    target_type = #{targetType}
+		  	</if>
+		  	<if test="targetId != null">
+		  	    and target_id = #{targetId}
+		  	</if>
+		  	<if test="level != null">
+		  	    and level = #{level}
+		  	</if>
+		  	<if test="type != null">
+		  	    and type = #{type}
+		  	</if>
+		</where>
+		order by target_id asc;
+	</select>
+
+	<select id="findAlertConfigById" resultMap="alertConfig" parameterType="java.lang.Integer">
+		select * from monitor_alert_config where id =
+		#{id}
+	</select>
+
+	<update id="updateAlertConfig" parameterType="com.asiainfo.gim.monitor.domain.AlertConfig">
+		update
+		monitor_alert_config set level = #{level}, target_type = #{targetType}, 
+		target_id = #{targetId}, properties = #{properties} 
+		where
+		id = #{id}
+	</update>
+
+	<delete id="deleteAlertConfig" parameterType="java.lang.Integer">
+		delete from
+		monitor_alert_config where id = #{id}
+	</delete>
+
+
+</mapper>
