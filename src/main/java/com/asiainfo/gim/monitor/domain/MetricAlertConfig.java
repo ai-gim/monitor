@@ -1,6 +1,6 @@
 package com.asiainfo.gim.monitor.domain;
 
-public class MetricAlertConfig extends AlertConfigBase
+public class MetricAlertConfig extends AlertConfig
 {
 	// 告警阈值
 	private float thresholdValue;

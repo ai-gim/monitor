@@ -1,6 +1,6 @@
 package com.asiainfo.gim.monitor.domain;
 
-public class AlertConfigBase
+public class AlertConfig
 {
 	private Integer id;
 	private Integer targetType;
@@ -9,6 +9,8 @@ public class AlertConfigBase
 	private Integer level;
 	// 告警类型(metric, heartbeat)
 	private Integer type;
+	//专属字段的json数据
+	private String properties;
 
 	public Integer getId()
 	{
@@ -58,6 +60,16 @@ public class AlertConfigBase
 	public void setType(Integer type)
 	{
 		this.type = type;
+	}
+
+	public String getProperties()
+	{
+		return properties;
+	}
+
+	public void setProperties(String properties)
+	{
+		this.properties = properties;
 	}
 
 }

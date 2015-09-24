@@ -207,15 +207,12 @@ CREATE TABLE IF NOT EXISTS `monitor_alert` (
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
-CREATE TABLE IF NOT EXISTS `monitor_alert_config_metric` (
+CREATE TABLE IF NOT EXISTS `monitor_alert_config` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `target_type` INT NULL,
   `target_id` VARCHAR(128) NULL,
-  `keep_time` INT NULL,
-  `recover_time` INT NULL,
-  `threshold_value` FLOAT NULL,
-  `threshold_symbol` VARCHAR(64) NULL,
   `level` INT NULL,
-  `metric` VARCHAR(128) NULL,
+  `type` INT NULL,
+  `properties` TEXT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
