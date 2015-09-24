@@ -1,5 +1,5 @@
 #!/bin/bash
-# chkconfig: - 3004 75
+# chkconfig: - 95 75
 # description: gim monitor service
 
 start() {

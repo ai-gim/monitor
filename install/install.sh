@@ -23,6 +23,7 @@ cp conf/* /etc/gim
 cp init.d/gim-monitor /etc/rc.d/init.d
 
 chmod 755 bin/*
+chmod 755 /etc/rc.d/init.d/gim-monitor
 chkconfig gim-monitor on
 
 exit 0
