@@ -1,9 +1,4 @@
 <project name="gim-monitor-deploy" default="build" basedir="..">
-	
-	<property name="USER" value="root"></property>
-	<property name="PASSWD" value="123456"></property>
-	<property name="HOST" value="172.16.102.122"></property>
-	
 	<target name="deploy">
 		<scp todir="${USER}:${PASSWD}@${HOST}:/usr/local/lib/gim" trust="true">
 			<fileset dir="temp">
