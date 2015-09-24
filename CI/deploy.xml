@@ -1,20 +1,15 @@
 <project name="gim-monitor-deploy" default="build" basedir="..">
-	
-	<property name="USER" value="root"></property>
-	<property name="PASSWD" value="123456"></property>
-	<property name="HOST" value="172.16.102.122"></property>
-	
 	<target name="deploy">
 		<scp todir="${USER}:${PASSWD}@${HOST}:/usr/local/lib/gim" trust="true">
 			<fileset dir="temp">
-				<include name="monitor.zip"/>
+				<include name="monitor.tar.gz"/>
 			</fileset>
 		</scp>
 		<sshexec host="${HOST}" username="${USER}"  password="${PASSWD}" trust="true" command="
 			cd /usr/local/lib/gim;
 			rm -rf monitor;
-			unzip monitor.zip;
-			rm -rf monitor.zip;
+			tar -xzvf monitor.tar.gz;
+			rm -rf monitor.tar.gz;
 			cd monitor/bin;
 			chmod 755 *;
 			./gim-monitor stop;

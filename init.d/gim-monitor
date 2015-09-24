@@ -1,0 +1,35 @@
+#!/bin/bash
+# chkconfig: - 95 75
+# description: gim monitor service
+
+start() {
+/usr/local/lib/gim/monitor/bin/gim-monitor start
+}
+
+stop() {
+/usr/local/lib/gim/monitor/bin/gim-monitor stop
+}
+
+status() {
+/usr/local/lib/gim/monitor/bin/gim-monitor status
+}
+
+# See how we were called.
+case "$1" in
+  start)
+start
+;;
+  status)
+status
+;;
+  stop)
+stop
+;;
+  restart)
+stop
+start
+;;
+  *)
+echo $"Usage: $0 {start|stop|status|restart}"
+exit 2
+esac
