@@ -20,6 +20,9 @@ fi
 
 cd $install_dir/monitor
 cp conf/* /etc/gim
+cp init.d/gim-monitor /etc/rc.d/init.d
+
 chmod 755 bin/*
+chkconfig gim-monitor on
 
 exit 0

@@ -11,6 +11,7 @@
 	<target name="copyfile">
 		<copydir dest="temp/monitor/bin" src="bin"></copydir>
 		<copydir dest="temp/monitor/conf" src="conf"></copydir>
+		<copydir dest="temp/monitor/init.d" src="init.d"></copydir>
 		<copy tofile="temp/monitor/monitor.jar" file="target/monitor-${VERSION}.jar"></copy>
 	</target>
 	
