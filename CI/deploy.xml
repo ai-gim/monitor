@@ -7,14 +7,14 @@
 	<target name="deploy">
 		<scp todir="${USER}:${PASSWD}@${HOST}:/usr/local/lib/gim" trust="true">
 			<fileset dir="temp">
-				<include name="monitor.zip"/>
+				<include name="monitor.tar.gz"/>
 			</fileset>
 		</scp>
 		<sshexec host="${HOST}" username="${USER}"  password="${PASSWD}" trust="true" command="
 			cd /usr/local/lib/gim;
 			rm -rf monitor;
-			unzip monitor.zip;
-			rm -rf monitor.zip;
+			tar -xzvf monitor.tar.gz;
+			rm -rf monitor.tar.gz;
 			cd monitor/bin;
 			chmod 755 *;
 			./gim-monitor stop;

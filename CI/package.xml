@@ -15,7 +15,8 @@
 	</target>
 	
 	<target name="package">
-		<zip destfile="temp/monitor.zip" basedir="temp"></zip>
+		<tar destfile="temp/monitor.tar.gz" basedir="temp" compression="gzip"></tar>
+		<exec command="cat install/install.sh temp/monitor.tar.gz > gim-monitor.bin"></exec>
 	</target>
 	
 	<target name="build">
