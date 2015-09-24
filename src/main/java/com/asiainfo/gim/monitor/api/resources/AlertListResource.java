@@ -18,7 +18,6 @@ import com.asiainfo.gim.monitor.service.AlertService;
 @Produces(MediaType.APPLICATION_JSON)
 public class AlertListResource
 {
-
 	private AlertService alertService;
 
 	public AlertListResource()
@@ -27,37 +26,51 @@ public class AlertListResource
 	}
 
 	@QueryParam("startTime")
-	private long startTime;
+	private Long startTime;
 
 	@QueryParam("endTime")
-	private long endTime;
+	private Long endTime;
 
 	@QueryParam("targetType")
-	private int targetType;
+	private Integer targetType;
 
 	@QueryParam("targetId")
 	private String targetId;
 
 	@QueryParam("level")
-	private int level;
+	private Integer level;
 
 	@QueryParam("status")
-	private int status;
+	private Integer status;
 
 	@QueryParam("source")
 	private String source;
+	
+	@QueryParam("start")
+	private int start;
+	
+	@QueryParam("limit")
+	private int limit;
 
 	@GET
 	public List<Alert> listAlertMetric()
 	{
 		AlertQueryParam alertQueryParam = new AlertQueryParam();
-		alertQueryParam.setStartTime(new Date(startTime));
-		alertQueryParam.setEndTime(new Date(endTime));
+		if (startTime != null)
+		{
+			alertQueryParam.setStartTime(new Date(startTime));
+		}
+		if (endTime != null)
+		{
+			alertQueryParam.setEndTime(new Date(endTime));
+		}
 		alertQueryParam.setTargetType(targetType);
 		alertQueryParam.setTargetId(targetId);
 		alertQueryParam.setLevel(level);
 		alertQueryParam.setStatus(status);
 		alertQueryParam.setSource(source);
+		alertQueryParam.setStart(start);
+		alertQueryParam.setLimit(limit);
 		return alertService.listAlerts(alertQueryParam);
 	}
 
