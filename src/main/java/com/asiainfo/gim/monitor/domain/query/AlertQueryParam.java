@@ -2,7 +2,7 @@ package com.asiainfo.gim.monitor.domain.query;
 
 import java.util.Date;
 
-public class AlertQueryParam
+public class AlertQueryParam extends QueryCondition
 {
 	private Date startTime;
 	private Date endTime;
