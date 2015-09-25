@@ -9,10 +9,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.asiainfo.gim.common.rest.exception.ValidationException;
 import com.asiainfo.gim.common.spring.SpringContext;
+import com.asiainfo.gim.monitor.api.validator.AlertConfigValidator;
 import com.asiainfo.gim.monitor.domain.AlertConfig;
 import com.asiainfo.gim.monitor.service.AlertConfigService;
 
@@ -27,8 +25,8 @@ public class AlertConfigResource
 	{
 		alertConfigService = SpringContext.getBean(AlertConfigService.class);
 	}
-	
-	@PathParam("id") 
+
+	@PathParam("id")
 	private int id;
 
 	@GET
@@ -41,26 +39,17 @@ public class AlertConfigResource
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public AlertConfig addAlertConfig(AlertConfig alertConfig)
+	public AlertConfig addAlertConfig(@AlertConfigValidator AlertConfig alertConfig)
 	{
-		if (StringUtils.isBlank(alertConfig.getTargetId()) || alertConfig.getProperties() == null
-				|| alertConfig.getTargetType() == null || alertConfig.getType() == null)
-		{
-			throw new ValidationException();
-		}
 		alertConfigService.addAlertConfigDao(alertConfig);
 		return alertConfig;
 	}
 
 	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
-	public AlertConfig updateAlertConfig(AlertConfig alertConfig)
+	@Path("{id}")
+	public AlertConfig updateAlertConfig(@AlertConfigValidator AlertConfig alertConfig)
 	{
-		if (StringUtils.isBlank(alertConfig.getTargetId()) || alertConfig.getProperties() == null
-				|| alertConfig.getTargetType() == null || alertConfig.getType() == null || alertConfig.getId() == null)
-		{
-			throw new ValidationException();
-		}
+		alertConfig.setId(id);
 		alertConfigService.updateAlertConfig(alertConfig);
 		return alertConfig;
 	}
