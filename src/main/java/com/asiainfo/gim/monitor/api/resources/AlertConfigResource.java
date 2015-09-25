@@ -9,7 +9,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.asiainfo.gim.common.rest.exception.ValidationException;
 import com.asiainfo.gim.common.spring.SpringContext;
 import com.asiainfo.gim.monitor.api.validator.AlertConfigValidator;
 import com.asiainfo.gim.monitor.domain.AlertConfig;
@@ -42,10 +41,6 @@ public class AlertConfigResource
 	@Produces(MediaType.APPLICATION_JSON)
 	public AlertConfig addAlertConfig(@AlertConfigValidator AlertConfig alertConfig)
 	{
-		if (alertConfig == null)
-		{
-			throw new ValidationException();
-		}
 		alertConfigService.addAlertConfigDao(alertConfig);
 		return alertConfig;
 	}
@@ -54,10 +49,7 @@ public class AlertConfigResource
 	@Path("{id}")
 	public AlertConfig updateAlertConfig(@AlertConfigValidator AlertConfig alertConfig)
 	{
-		if (alertConfig == null)
-		{
-			throw new ValidationException();
-		}
+		alertConfig.setId(id);
 		alertConfigService.updateAlertConfig(alertConfig);
 		return alertConfig;
 	}

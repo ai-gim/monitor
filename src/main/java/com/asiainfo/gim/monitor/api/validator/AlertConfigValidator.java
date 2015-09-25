@@ -55,6 +55,10 @@ public @interface AlertConfigValidator
 
 		private boolean validAlertConfig(AlertConfig alertConfig)
 		{
+			if(alertConfig == null)
+			{
+				return false;
+			}
 			if (alertConfig.getProperties() == null || alertConfig.getType() == null)
 			{
 				return false;
