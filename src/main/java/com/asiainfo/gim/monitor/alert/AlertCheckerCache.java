@@ -14,8 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.Resource;
 
-import net.sf.json.JSONObject;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -26,14 +24,11 @@ import com.asiainfo.gim.client.server_manage.api.ServerApi;
 import com.asiainfo.gim.client.server_manage.domain.Server;
 import com.asiainfo.gim.monitor.Constants;
 import com.asiainfo.gim.monitor.Constants.AlertConfigType;
-import com.asiainfo.gim.monitor.Constants.AlertConfigTypeClass;
 import com.asiainfo.gim.monitor.alert.checker.AlertChecker;
 import com.asiainfo.gim.monitor.alert.checker.MetricAlertChecker;
 import com.asiainfo.gim.monitor.domain.AlertConfig;
-import com.asiainfo.gim.monitor.domain.MetricAlertConfig;
 import com.asiainfo.gim.monitor.domain.query.AlertConfigQueryParam;
 import com.asiainfo.gim.monitor.service.AlertConfigService;
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 
 /**
  * @author zhangli
@@ -58,54 +53,52 @@ public class AlertCheckerCache implements InitializingBean
 		this.serverApi = serverApi;
 	}
 
-
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
 		alertCheckerMap = new ConcurrentHashMap<String, AlertChecker<? extends Object>>();
 
-		// 度量指标告警
-		initMetricAlertCheckers();
-	}
-
-	public void initMetricAlertCheckers()
-	{
-		ClientContext.setToken(Constants.INTERNAL_TOKEN);
-		List<Server> servers = serverApi.listServers();
 		AlertConfigQueryParam alertConfigQueryParam = new AlertConfigQueryParam();
 		alertConfigQueryParam.setType(AlertConfigType.METRIC_ALERT_CONFIG);
 		List<AlertConfig> alertConfigs = alertConfigService.listAlertConfigs(alertConfigQueryParam);
 		
-		for (AlertConfig alertConfig : alertConfigs)
+		for(AlertConfig alertConfig: alertConfigs)
 		{
-			JSONObject jsonObject = JSONObject.fromObject(alertConfig.getProperties());
-			MetricAlertConfig metricAlertConfig = (MetricAlertConfig) JSONObject.toBean(jsonObject, MetricAlertConfig.class);
-			BeanUtils.copyProperties(alertConfig, metricAlertConfig);
-			if (StringUtils.isEmpty(metricAlertConfig.getTargetId()))
+			if(alertConfig.getType() == AlertConfigType.METRIC_ALERT_CONFIG)
 			{
-				for (Server server : servers)
-				{
-					MetricAlertConfig alertConfigClone = new MetricAlertConfig();
-					BeanUtils.copyProperties(metricAlertConfig, alertConfigClone);
-					alertConfigClone.setTargetId(server.getId());
-
-					MetricAlertChecker alertChecker = new MetricAlertChecker();
-					alertChecker.setAlertConfig(alertConfigClone);
-
-					alertCheckerMap.put(
-							"metric-" + metricAlertConfig.getTargetType() + server.getId() + metricAlertConfig.getMetric(),
-							alertChecker);
-				}
+				// 度量指标告警
+				initMetricAlertCheckers(alertConfig);
 			}
-			else
+		}
+	}
+
+	public void initMetricAlertCheckers(AlertConfig alertConfig)
+	{
+		ClientContext.setToken(Constants.INTERNAL_TOKEN);
+		List<Server> servers = serverApi.listServers();
+
+		if (StringUtils.isEmpty(alertConfig.getTargetId()))
+		{
+			for (Server server : servers)
 			{
+				AlertConfig alertConfigClone = new AlertConfig();
+				BeanUtils.copyProperties(alertConfig, alertConfigClone);
+				alertConfigClone.setTargetId(server.getId());
+
 				MetricAlertChecker alertChecker = new MetricAlertChecker();
-				alertChecker.setAlertConfig(metricAlertConfig);
+				alertChecker.setAlertConfig(alertConfigClone);
 
-				alertCheckerMap.put(
-						"metric-" + metricAlertConfig.getTargetType() + metricAlertConfig.getTargetId() + metricAlertConfig.getMetric(),
-						alertChecker);
+				alertCheckerMap.put("metric-" + alertConfig.getTargetType() + server.getId()
+						+ alertConfig.getProperties().get("metric"), alertChecker);
 			}
+		}
+		else
+		{
+			MetricAlertChecker alertChecker = new MetricAlertChecker();
+			alertChecker.setAlertConfig(alertConfig);
+
+			alertCheckerMap.put("metric-" + alertConfig.getTargetType() + alertConfig.getTargetId()
+					+ alertConfig.getProperties().get("metric"), alertChecker);
 		}
 	}
 

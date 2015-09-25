@@ -25,9 +25,4 @@ public interface Constants
 	{
 		public static final int METRIC_ALERT_CONFIG = 1;
 	}
-	
-	public static interface AlertConfigTypeClass
-	{
-		public static final String METRIC_ALERT_CONFIG ="com.asiainfo.gim.monitor.domain.MetricAlertConfig";
-	}
 }

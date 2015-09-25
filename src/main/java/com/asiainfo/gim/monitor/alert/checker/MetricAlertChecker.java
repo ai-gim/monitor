@@ -13,10 +13,11 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 
 import com.asiainfo.gim.common.spring.SpringContext;
 import com.asiainfo.gim.monitor.domain.Alert;
-import com.asiainfo.gim.monitor.domain.MetricAlertConfig;
+import com.asiainfo.gim.monitor.domain.AlertConfig;
 import com.asiainfo.gim.monitor.domain.query.AlertQueryParam;
 import com.asiainfo.gim.monitor.service.AlertService;
 
@@ -26,12 +27,12 @@ import com.asiainfo.gim.monitor.service.AlertService;
  */
 public class MetricAlertChecker extends AlertChecker<Float>
 {
-	private MetricAlertConfig alertConfig;
+	private AlertConfig alertConfig;
 
 	private long recordTimeAlert;
 	private long recordTimeRecover;
 
-	public void setAlertConfig(MetricAlertConfig alertConfig)
+	public void setAlertConfig(AlertConfig alertConfig)
 	{
 		this.alertConfig = alertConfig;
 	}
@@ -39,13 +40,14 @@ public class MetricAlertChecker extends AlertChecker<Float>
 	@Override
 	public Alert doCheckAlert(Float value)
 	{
-		if(isOverThreshold(value) && findCurrentAlert() == null)
+		if (isOverThreshold(value) && findCurrentAlert() == null)
 		{
-			if(recordTimeAlert == 0)
+			if (recordTimeAlert == 0)
 			{
 				recordTimeAlert = System.currentTimeMillis();
 			}
-			else if(System.currentTimeMillis() - recordTimeAlert > alertConfig.getKeepTime() * 1000)
+			else if (System.currentTimeMillis() - recordTimeAlert > NumberUtils.toInt(alertConfig.getProperties().get(
+					"keepTime")) * 1000)
 			{
 				Alert alert = new Alert();
 				alert.setId(UUID.randomUUID().toString());
@@ -63,7 +65,7 @@ public class MetricAlertChecker extends AlertChecker<Float>
 		{
 			recordTimeAlert = 0;
 		}
-		
+
 		return null;
 	}
 
@@ -72,7 +74,8 @@ public class MetricAlertChecker extends AlertChecker<Float>
 		Alert alert = findCurrentAlert();
 		if (!isOverThreshold(value) && alert != null)
 		{
-			if (System.currentTimeMillis() - recordTimeRecover > alertConfig.getRecoverTime())
+			if (System.currentTimeMillis() - recordTimeRecover > NumberUtils.toInt(alertConfig.getProperties().get(
+					"recoverTime")))
 			{
 				return alert;
 			}
@@ -86,15 +89,18 @@ public class MetricAlertChecker extends AlertChecker<Float>
 
 	private boolean isOverThreshold(float value)
 	{
-		if (StringUtils.equals(alertConfig.getThresholdSymbol(), ">") && value > alertConfig.getThresholdValue())
+		if (StringUtils.equals(alertConfig.getProperties().get("thresholdSymbol"), ">")
+				&& value > NumberUtils.toInt(alertConfig.getProperties().get("thresholdValue")))
 		{
 			return true;
 		}
-		else if (StringUtils.equals(alertConfig.getThresholdSymbol(), "<") && value < alertConfig.getThresholdValue())
+		else if (StringUtils.equals(alertConfig.getProperties().get("thresholdSymbol"), "<")
+				&& value < NumberUtils.toInt(alertConfig.getProperties().get("thresholdValue")))
 		{
 			return true;
 		}
-		else if (StringUtils.equals(alertConfig.getThresholdSymbol(), "=") && value == alertConfig.getThresholdValue())
+		else if (StringUtils.equals(alertConfig.getProperties().get("thresholdSymbol"), "=")
+				&& value == NumberUtils.toInt(alertConfig.getProperties().get("thresholdValue")))
 		{
 			return true;
 		}
@@ -115,67 +121,67 @@ public class MetricAlertChecker extends AlertChecker<Float>
 		List<Alert> alerts = alertService.listAlerts(alertQueryParam);
 		return alerts.size() > 0 ? alerts.get(0) : null;
 	}
-	
+
 	public String getDescription(float value)
 	{
-		if(StringUtils.equals(alertConfig.getMetric(), "cpu_usage"))
+		if (StringUtils.equals(alertConfig.getProperties().get("metric"), "cpu_usage"))
 		{
-			if(StringUtils.equals(alertConfig.getThresholdSymbol(), ">"))
+			if (StringUtils.equals(alertConfig.getProperties().get("thresholdSymbol"), ">"))
 			{
-				return "CPU使用率超过 " + alertConfig.getThresholdValue() + "%";
+				return "CPU使用率超过 " + alertConfig.getProperties().get("thresholdValue") + "%";
 			}
-			else if(StringUtils.equals(alertConfig.getThresholdSymbol(), "<"))
+			else if (StringUtils.equals(alertConfig.getProperties().get("thresholdSymbol"), "<"))
 			{
-				return "CPU使用率低于 " + alertConfig.getThresholdValue() + "%";
+				return "CPU使用率低于 " + alertConfig.getProperties().get("thresholdValue") + "%";
 			}
 			else
 			{
-				return "CPU使用率等于 " + alertConfig.getThresholdValue() + "%";
+				return "CPU使用率等于 " + alertConfig.getProperties().get("thresholdValue") + "%";
 			}
 		}
-		else if(StringUtils.equals(alertConfig.getMetric(), "mem_usage"))
+		else if (StringUtils.equals(alertConfig.getProperties().get("metric"), "mem_usage"))
 		{
-			if(StringUtils.equals(alertConfig.getThresholdSymbol(), ">"))
+			if (StringUtils.equals(alertConfig.getProperties().get("thresholdSymbol"), ">"))
 			{
-				return "内存使用率超过 " + alertConfig.getThresholdValue() + "%";
+				return "内存使用率超过 " + alertConfig.getProperties().get("thresholdValue") + "%";
 			}
-			else if(StringUtils.equals(alertConfig.getThresholdSymbol(), "<"))
+			else if (StringUtils.equals(alertConfig.getProperties().get("thresholdSymbol"), "<"))
 			{
-				return "内存使用率低于 " + alertConfig.getThresholdValue() + "%";
+				return "内存使用率低于 " + alertConfig.getProperties().get("thresholdValue") + "%";
 			}
 			else
 			{
-				return "内存使用率等于 " + alertConfig.getThresholdValue() + "%";
+				return "内存使用率等于 " + alertConfig.getProperties().get("thresholdValue") + "%";
 			}
 		}
-		else if(StringUtils.equals(alertConfig.getMetric(), "disk_usage"))
+		else if (StringUtils.equals(alertConfig.getProperties().get("metric"), "disk_usage"))
 		{
-			if(StringUtils.equals(alertConfig.getThresholdSymbol(), ">"))
+			if (StringUtils.equals(alertConfig.getProperties().get("thresholdSymbol"), ">"))
 			{
-				return "磁盘使用率超过 " + alertConfig.getThresholdValue() + "%";
+				return "磁盘使用率超过 " + alertConfig.getProperties().get("thresholdValue") + "%";
 			}
-			else if(StringUtils.equals(alertConfig.getThresholdSymbol(), "<"))
+			else if (StringUtils.equals(alertConfig.getProperties().get("thresholdSymbol"), "<"))
 			{
-				return "磁盘使用率低于 " + alertConfig.getThresholdValue() + "%";
+				return "磁盘使用率低于 " + alertConfig.getProperties().get("thresholdValue") + "%";
 			}
 			else
 			{
-				return "磁盘使用率等于 " + alertConfig.getThresholdValue() + "%";
+				return "磁盘使用率等于 " + alertConfig.getProperties().get("thresholdValue") + "%";
 			}
 		}
 		else
 		{
-			if(StringUtils.equals(alertConfig.getThresholdSymbol(), ">"))
+			if (StringUtils.equals(alertConfig.getProperties().get("thresholdSymbol"), ">"))
 			{
-				return alertConfig.getMetric() + "超过" + alertConfig.getThresholdValue() + "%";
+				return alertConfig.getProperties().get("metric") + "超过" + alertConfig.getProperties().get("thresholdValue") + "%";
 			}
-			else if(StringUtils.equals(alertConfig.getThresholdSymbol(), "<"))
+			else if (StringUtils.equals(alertConfig.getProperties().get("thresholdSymbol"), "<"))
 			{
-				return alertConfig.getMetric() + "低于" + alertConfig.getThresholdValue() + "%";
+				return alertConfig.getProperties().get("metric") + "低于" + alertConfig.getProperties().get("thresholdValue") + "%";
 			}
 			else
 			{
-				return alertConfig.getMetric() + "等于" + alertConfig.getThresholdValue() + "%";
+				return alertConfig.getProperties().get("metric") + "等于" + alertConfig.getProperties().get("thresholdValue") + "%";
 			}
 		}
 	}
