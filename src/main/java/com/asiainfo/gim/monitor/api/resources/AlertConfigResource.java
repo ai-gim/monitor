@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.asiainfo.gim.common.rest.exception.ValidationException;
 import com.asiainfo.gim.common.spring.SpringContext;
+import com.asiainfo.gim.monitor.api.validator.AlertConfigValidator;
 import com.asiainfo.gim.monitor.domain.AlertConfig;
 import com.asiainfo.gim.monitor.service.AlertConfigService;
 
@@ -41,10 +42,9 @@ public class AlertConfigResource
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public AlertConfig addAlertConfig(AlertConfig alertConfig)
+	public AlertConfig addAlertConfig(@AlertConfigValidator AlertConfig alertConfig)
 	{
-		if (StringUtils.isBlank(alertConfig.getTargetId()) || alertConfig.getProperties() == null
-				|| alertConfig.getTargetType() == null || alertConfig.getType() == null)
+		if (alertConfig == null)
 		{
 			throw new ValidationException();
 		}
@@ -54,10 +54,9 @@ public class AlertConfigResource
 
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
-	public AlertConfig updateAlertConfig(AlertConfig alertConfig)
+	public AlertConfig updateAlertConfig(@AlertConfigValidator AlertConfig alertConfig)
 	{
-		if (StringUtils.isBlank(alertConfig.getTargetId()) || alertConfig.getProperties() == null
-				|| alertConfig.getTargetType() == null || alertConfig.getType() == null || alertConfig.getId() == null)
+		if (alertConfig == null)
 		{
 			throw new ValidationException();
 		}
