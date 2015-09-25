@@ -7,7 +7,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.StringUtils;
@@ -28,15 +27,14 @@ public class AlertConfigResource
 	{
 		alertConfigService = SpringContext.getBean(AlertConfigService.class);
 	}
+	
+	@PathParam("id") 
+	private int id;
 
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public AlertConfig getAlertConfig(@QueryParam("id") Integer id)
+	@Path("{id}")
+	public AlertConfig getAlertConfig()
 	{
-		if (id == null)
-		{
-			throw new ValidationException();
-		}
 		AlertConfig alertConfig = alertConfigService.findAlertConfigById(id);
 		return alertConfig;
 	}
@@ -45,7 +43,7 @@ public class AlertConfigResource
 	@Produces(MediaType.APPLICATION_JSON)
 	public AlertConfig addAlertConfig(AlertConfig alertConfig)
 	{
-		if (StringUtils.isBlank(alertConfig.getTargetId()) || StringUtils.isBlank(alertConfig.getProperties())
+		if (StringUtils.isBlank(alertConfig.getTargetId()) || alertConfig.getProperties() == null
 				|| alertConfig.getTargetType() == null || alertConfig.getType() == null)
 		{
 			throw new ValidationException();
@@ -58,7 +56,7 @@ public class AlertConfigResource
 	@Produces(MediaType.APPLICATION_JSON)
 	public AlertConfig updateAlertConfig(AlertConfig alertConfig)
 	{
-		if (StringUtils.isBlank(alertConfig.getTargetId()) || StringUtils.isBlank(alertConfig.getProperties())
+		if (StringUtils.isBlank(alertConfig.getTargetId()) || alertConfig.getProperties() == null
 				|| alertConfig.getTargetType() == null || alertConfig.getType() == null || alertConfig.getId() == null)
 		{
 			throw new ValidationException();
@@ -69,12 +67,8 @@ public class AlertConfigResource
 
 	@DELETE
 	@Path("{id}")
-	public void deleteAlertConfig(@PathParam("id") int id)
+	public void deleteAlertConfig()
 	{
-//		if (id == null)
-//		{
-//			throw new ValidationException();
-//		}
 		alertConfigService.deleteAlertConfig(id);
 	}
 

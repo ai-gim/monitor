@@ -11,7 +11,7 @@
 		<result column="target_id" property="targetId" />
 		<result column="level" property="level" />
 		<result column="type" property="type" />
-		<result column="properties" property="properties" />
+		<result column="properties" property="properties" javaType="java.util.Map" jdbcType="VARCHAR"/>
 	</resultMap>
 
 	<insert id="insertAlertConfig" parameterType="com.asiainfo.gim.monitor.domain.AlertConfig"
@@ -19,7 +19,7 @@
 		insert into
 		monitor_alert_config (target_type, target_id, level, type, properties)
 		values
-		(#{targetType}, #{targetId}, #{level}, #{type}, #{properties})
+		(#{targetType}, #{targetId}, #{level}, #{type}, #{properties, jdbcType=VARCHAR})
 	</insert>
 
 	<select id="listAlertConfigs" resultMap="alertConfig" parameterType="com.asiainfo.gim.monitor.domain.query.AlertConfigQueryParam">
@@ -50,7 +50,7 @@
 	<update id="updateAlertConfig" parameterType="com.asiainfo.gim.monitor.domain.AlertConfig">
 		update
 		monitor_alert_config set level = #{level}, target_type = #{targetType}, 
-		target_id = #{targetId}, properties = #{properties} 
+		target_id = #{targetId}, properties = #{properties, jdbcType=VARCHAR} 
 		where
 		id = #{id}
 	</update>

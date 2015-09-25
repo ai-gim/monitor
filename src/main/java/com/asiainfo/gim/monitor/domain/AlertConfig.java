@@ -1,5 +1,7 @@
 package com.asiainfo.gim.monitor.domain;
 
+import java.util.Map;
+
 public class AlertConfig
 {
 	private Integer id;
@@ -9,8 +11,7 @@ public class AlertConfig
 	private Integer level;
 	// 告警类型(metric, heartbeat)
 	private Integer type;
-	//专属字段的json数据
-	private String properties;
+	private Map<String, String> properties;
 
 	public Integer getId()
 	{
@@ -62,12 +63,12 @@ public class AlertConfig
 		this.type = type;
 	}
 
-	public String getProperties()
+	public Map<String, String> getProperties()
 	{
 		return properties;
 	}
 
-	public void setProperties(String properties)
+	public void setProperties(Map<String, String> properties)
 	{
 		this.properties = properties;
 	}

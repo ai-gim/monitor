@@ -26,16 +26,16 @@ public class AlertConfigListResource
 	}
 
 	@QueryParam("targetType")
-	Integer targetType;
+	private Integer targetType;
 
 	@QueryParam("targetId")
-	String targetId;
+	private String targetId;
 
 	@QueryParam("level")
-	Integer level;
+	private Integer level;
 	
 	@QueryParam("type")
-	Integer type;
+	private Integer type;
 
 	@GET
 	public List<AlertConfig> getAlertConfig()
