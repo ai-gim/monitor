@@ -9,8 +9,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.asiainfo.gim.common.rest.exception.ValidationException;
 import com.asiainfo.gim.common.spring.SpringContext;
 import com.asiainfo.gim.monitor.api.validator.AlertConfigValidator;
@@ -28,8 +26,8 @@ public class AlertConfigResource
 	{
 		alertConfigService = SpringContext.getBean(AlertConfigService.class);
 	}
-	
-	@PathParam("id") 
+
+	@PathParam("id")
 	private int id;
 
 	@GET
@@ -53,7 +51,7 @@ public class AlertConfigResource
 	}
 
 	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
+	@Path("{id}")
 	public AlertConfig updateAlertConfig(@AlertConfigValidator AlertConfig alertConfig)
 	{
 		if (alertConfig == null)
