@@ -16,10 +16,8 @@
 
 	<insert id="insertAlertConfig" parameterType="com.asiainfo.gim.monitor.domain.AlertConfig"
 		useGeneratedKeys="true" keyProperty="id">
-		insert into
-		monitor_alert_config (target_type, target_id, level, type, properties)
-		values
-		(#{targetType}, #{targetId}, #{level}, #{type}, #{properties, jdbcType=VARCHAR})
+		insert into monitor_alert_config (id, target_type, target_id, level, type, properties) values
+			(#{id}, #{targetType}, #{targetId}, #{level}, #{type}, #{properties, jdbcType=VARCHAR})
 	</insert>
 
 	<select id="listAlertConfigs" resultMap="alertConfig" parameterType="com.asiainfo.gim.monitor.domain.query.AlertConfigQueryParam">
@@ -42,7 +40,7 @@
 		order by target_id asc;
 	</select>
 
-	<select id="findAlertConfigById" resultMap="alertConfig" parameterType="java.lang.Integer">
+	<select id="findAlertConfigById" resultMap="alertConfig" parameterType="java.lang.String">
 		select * from monitor_alert_config where id =
 		#{id}
 	</select>
@@ -55,7 +53,7 @@
 		id = #{id}
 	</update>
 
-	<delete id="deleteAlertConfig" parameterType="java.lang.Integer">
+	<delete id="deleteAlertConfig" parameterType="java.lang.String">
 		delete from
 		monitor_alert_config where id = #{id}
 	</delete>

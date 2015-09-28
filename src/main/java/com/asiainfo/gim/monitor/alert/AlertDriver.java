@@ -14,25 +14,32 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
 import com.asiainfo.gim.client.ClientContext;
 import com.asiainfo.gim.client.server_manage.api.ServerApi;
 import com.asiainfo.gim.client.server_manage.domain.Server;
 import com.asiainfo.gim.monitor.Constants;
+import com.asiainfo.gim.monitor.Constants.AlertType;
 import com.asiainfo.gim.monitor.Constants.ResourceType;
 import com.asiainfo.gim.monitor.alert.checker.MetricAlertChecker;
+import com.asiainfo.gim.monitor.dao.AlertConfigDao;
+import com.asiainfo.gim.monitor.domain.AlertConfig;
 import com.asiainfo.gim.monitor.domain.Host;
 import com.asiainfo.gim.monitor.domain.Metric;
+import com.asiainfo.gim.monitor.domain.query.AlertConfigQueryParam;
 
 /**
  * @author zhangli
  *
  */
 @Service
-public class AlertDriver
+public class AlertDriver implements InitializingBean
 {
 	private ServerApi serverApi;
+	private AlertConfigDao alertConfigDao;
 	private AlertCheckerCache alertCheckerCache;
 
 	@Resource
@@ -45,6 +52,63 @@ public class AlertDriver
 	public void setAlertCheckerCache(AlertCheckerCache alertCheckerCache)
 	{
 		this.alertCheckerCache = alertCheckerCache;
+	}
+
+	@Resource
+	public void setAlertConfigDao(AlertConfigDao alertConfigDao)
+	{
+		this.alertConfigDao = alertConfigDao;
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception
+	{
+		AlertConfigQueryParam alertConfigQueryParam = new AlertConfigQueryParam();
+		alertConfigQueryParam.setType(AlertType.METRIC_ALERT);
+		List<AlertConfig> alertConfigs = alertConfigDao.listAlertConfigs(alertConfigQueryParam);
+
+		for (AlertConfig alertConfig : alertConfigs)
+		{
+			initAlertChecker(alertConfig);
+		}
+	}
+
+	public void initAlertChecker(AlertConfig alertConfig)
+	{
+		if (alertConfig.getType() == AlertType.METRIC_ALERT)
+		{
+			MetricAlertChecker alertChecker = new MetricAlertChecker();
+			alertChecker.setAlertConfig(alertConfig);
+			if (StringUtils.isEmpty(alertConfig.getTargetId()))
+			{
+				alertCheckerCache.put(
+						"metric-" + alertConfig.getTargetType() + alertConfig.getProperties().get("metric"),
+						alertChecker);
+			}
+			else
+			{
+				alertCheckerCache.put("metric-" + alertConfig.getTargetType() + alertConfig.getTargetId()
+						+ alertConfig.getProperties().get("metric"), alertChecker);
+			}
+		}
+	}
+
+	public void removeAlertChecker(String alertConfigId)
+	{
+		AlertConfig alertConfig = alertConfigDao.findAlertConfigById(alertConfigId);
+		if (alertConfig.getType() == AlertType.METRIC_ALERT)
+		{
+			if (StringUtils.isEmpty(alertConfig.getTargetId()))
+			{
+				alertCheckerCache.evict("metric-" + alertConfig.getTargetType()
+						+ alertConfig.getProperties().get("metric"));
+			}
+			else
+			{
+				alertCheckerCache.evict("metric-" + alertConfig.getTargetType() + alertConfig.getTargetId()
+						+ alertConfig.getProperties().get("metric"));
+			}
+		}
 	}
 
 	public void checkMetricAlert(List<Host> hosts)
@@ -67,11 +131,11 @@ public class AlertDriver
 				Metric metric = host.getMetrics().get("cpu_idle");
 				if (metric.getTn() < 20)
 				{
-					String key = "metric-" + ResourceType.SERVER + server.getId() + "cpu_usage";
-					Float value = (Float) metric.getValue();
-					if (alertCheckerCache.get(key) != null)
+					MetricAlertChecker alertChecker = getMetricAlertChecker(server.getId(), "cpu_usage");
+					if (alertChecker != null)
 					{
-						MetricAlertChecker alertChecker = (MetricAlertChecker) alertCheckerCache.get(key);
+						Float value = (Float) metric.getValue();
+						alertChecker.setTargetId(server.getId());
 						alertChecker.check(100 - value);
 					}
 				}
@@ -84,15 +148,14 @@ public class AlertDriver
 				Metric memFreeMetric = host.getMetrics().get("mem_free");
 				if (memFreeMetric.getTn() < 20)
 				{
-					String key = "metric-" + ResourceType.SERVER + server.getId() + "mem_usage";
-					Float memTotal = (Float) memTotalMetric.getValue();
-					Float memFree = (Float) memFreeMetric.getValue();
-
-					Float value = (memTotal - memFree) / memTotal;
-
-					if (alertCheckerCache.get(key) != null)
+					MetricAlertChecker alertChecker = getMetricAlertChecker(server.getId(), "mem_usage");
+					if (alertChecker != null)
 					{
-						MetricAlertChecker alertChecker = (MetricAlertChecker) alertCheckerCache.get(key);
+						Float memTotal = (Float) memTotalMetric.getValue();
+						Float memFree = (Float) memFreeMetric.getValue();
+						Float value = (memTotal - memFree) * 100 / memTotal;
+						
+						alertChecker.setTargetId(server.getId());
 						alertChecker.check(value);
 					}
 				}
@@ -103,21 +166,38 @@ public class AlertDriver
 			{
 				Metric diskTotalMetric = host.getMetrics().get("disk_total");
 				Metric diskFreeMetric = host.getMetrics().get("disk_free");
-				if (diskFreeMetric.getTn() < 20)
+				if (diskFreeMetric != null && diskTotalMetric != null && diskFreeMetric.getTn() < 20)
 				{
-					String key = "metric-" + ResourceType.SERVER + server.getId() + "disk_usage";
-					Float diskTotal = (Float) diskTotalMetric.getValue();
-					Float diskFree = (Float) diskFreeMetric.getValue();
-
-					Float value = (diskTotal - diskFree) / diskTotal;
-
-					if (alertCheckerCache.get(key) != null)
+					MetricAlertChecker alertChecker = getMetricAlertChecker(server.getId(), "disk_usage");
+					if (alertChecker != null)
 					{
-						MetricAlertChecker alertChecker = (MetricAlertChecker) alertCheckerCache.get(key);
+						Float diskTotal = (Float) diskTotalMetric.getValue();
+						Float diskFree = (Float) diskFreeMetric.getValue();
+						Float value = (diskTotal - diskFree) * 100 / diskTotal;
+						
+						alertChecker.setTargetId(server.getId());
 						alertChecker.check(value);
 					}
 				}
 			}
 		}
+	}
+
+	private MetricAlertChecker getMetricAlertChecker(String serverId, String metric)
+	{
+		String key1 = "metric-" + ResourceType.SERVER + serverId + metric;
+		String key2 = "metric-" + ResourceType.SERVER + metric;
+
+		MetricAlertChecker alertChecker = null;
+		if (alertCheckerCache.get(key1) != null)
+		{
+			alertChecker = (MetricAlertChecker) alertCheckerCache.get(key1);
+		}
+		else if (alertCheckerCache.get(key2) != null)
+		{
+			alertChecker = (MetricAlertChecker) alertCheckerCache.get(key2);
+		}
+
+		return alertChecker;
 	}
 }

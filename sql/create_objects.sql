@@ -203,12 +203,12 @@ CREATE TABLE IF NOT EXISTS `monitor_alert` (
   `status` INT NULL,
   `properties` TEXT NULL,
   `source` VARCHAR(128) NULL,
-  `config_id` INT NULL,
+  `config_id` VARCHAR(64) NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `monitor_alert_config` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+  `id` VARCHAR(64) NOT NULL,
   `target_type` INT NULL,
   `target_id` VARCHAR(128) NULL,
   `level` INT NULL,

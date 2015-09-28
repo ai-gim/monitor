@@ -12,7 +12,7 @@ public class Alert
 	private Integer level;
 	private Integer status;
 	private String source;
-	private Integer configId;
+	private String configId;
 	private String description;
 	private Map<String, String> properties;
 
@@ -106,12 +106,12 @@ public class Alert
 		this.status = status;
 	}
 
-	public Integer getConfigId()
+	public String getConfigId()
 	{
 		return configId;
 	}
 
-	public void setConfigId(Integer configId)
+	public void setConfigId(String configId)
 	{
 		this.configId = configId;
 	}

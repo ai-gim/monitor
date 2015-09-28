@@ -27,7 +27,7 @@ public class AlertConfigResource
 	}
 
 	@PathParam("id")
-	private int id;
+	private String id;
 
 	@GET
 	@Path("{id}")
@@ -41,7 +41,7 @@ public class AlertConfigResource
 	@Produces(MediaType.APPLICATION_JSON)
 	public AlertConfig addAlertConfig(@AlertConfigValidator AlertConfig alertConfig)
 	{
-		alertConfigService.addAlertConfigDao(alertConfig);
+		alertConfigService.addAlertConfig(alertConfig);
 		return alertConfig;
 	}
 

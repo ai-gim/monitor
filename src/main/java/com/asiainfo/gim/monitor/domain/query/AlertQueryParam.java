@@ -17,7 +17,7 @@ public class AlertQueryParam extends QueryCondition
 	// 告警来源
 	private String source;
 
-	private Integer configId;
+	private String configId;
 
 	public Date getStartTime()
 	{
@@ -89,12 +89,12 @@ public class AlertQueryParam extends QueryCondition
 		this.status = status;
 	}
 
-	public Integer getConfigId()
+	public String getConfigId()
 	{
 		return configId;
 	}
 
-	public void setConfigId(Integer configId)
+	public void setConfigId(String configId)
 	{
 		this.configId = configId;
 	}

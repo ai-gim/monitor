@@ -21,8 +21,8 @@ public interface Constants
 		public static final int SERVER = 1;
 	}
 	
-	public static interface AlertConfigType
+	public static interface AlertType
 	{
-		public static final int METRIC_ALERT_CONFIG = 1;
+		public static final int METRIC_ALERT = 1;
 	}
 }

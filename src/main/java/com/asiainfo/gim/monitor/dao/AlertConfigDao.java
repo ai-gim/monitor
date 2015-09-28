@@ -12,10 +12,10 @@ public interface AlertConfigDao
 
 	public List<AlertConfig> listAlertConfigs(AlertConfigQueryParam alertConfigParam);
 
-	public AlertConfig findAlertConfigById(int id);
+	public AlertConfig findAlertConfigById(String id);
 
 	public void updateAlertConfig(AlertConfig alertConfig);
 
-	public void deleteAlertConfig(int id);
+	public void deleteAlertConfig(String id);
 
 }
